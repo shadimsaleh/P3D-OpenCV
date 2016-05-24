@@ -1,11 +1,11 @@
 #include <iostream>
 #include <SFML\Graphics.hpp>
 #include <GL\glew.h>
-#include <ECS\Pool.h>
-#include <ECS\Entity.h>
-#include <Events\IObserver.h>
-#include <Events\Subject.h>
-#include <ECS\Group.h>
+#include <Lagswitch\ECS\Pool.h>
+#include <Lagswitch\ECS\Entity.h>
+#include <Lagswitch\ECS\IObserver.h>
+#include <Lagswitch\ECS\Subject.h>
+#include <Lagswitch\ECS\Group.h>
 #include <memory>
 
 struct Movement : public IComponent

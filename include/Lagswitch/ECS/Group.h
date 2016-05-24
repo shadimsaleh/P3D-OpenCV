@@ -1,8 +1,8 @@
 #pragma once
-#include <Events\IObserver.h>
-#include <ECS\Entity.h>
-#include <ECS\IComponent.h>
-#include <ECS\Pool.h>
+#include "IObserver.h"
+#include "Entity.h"
+#include "IComponent.h"
+#include "Pool.h"
 
 typedef std::shared_ptr<Entity> EntityPtr;
 

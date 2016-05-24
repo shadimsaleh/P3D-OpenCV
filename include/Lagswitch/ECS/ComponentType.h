@@ -1,6 +1,6 @@
 #pragma once
 #include <type_traits>
-#include <ECS/IComponent.h>
+#include "IComponent.h"
 
 typedef unsigned int ComponentId;
 

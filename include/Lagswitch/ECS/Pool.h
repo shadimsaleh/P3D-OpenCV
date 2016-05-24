@@ -1,9 +1,9 @@
 #pragma once
-#include <ECS\ISystem.h>
+#include "ISystem.h"
 #include <vector>
 #include <memory>
-#include <ECS/Entity.h>
-#include <Events\Subject.h>
+#include "Entity.h"
+#include "Subject.h"
 
 typedef std::shared_ptr<ISystem> SystemPtr;
 typedef std::shared_ptr<Entity> EntityPtr;

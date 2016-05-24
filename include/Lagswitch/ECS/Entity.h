@@ -3,8 +3,8 @@
 #include <map>
 #include <vector>
 #include <algorithm>
-#include <ECS/IComponent.h>
-#include <ECS/ComponentType.h>
+#include "IComponent.h"
+#include "ComponentType.h"
 
 typedef std::shared_ptr<IComponent> ComponentPtr;
 

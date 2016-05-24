@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <algorithm>
-#include <Events\IObserver.h>
+#include "IObserver.h"
 
 template <typename T>
 class Subject
