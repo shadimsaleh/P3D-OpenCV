@@ -35,7 +35,13 @@ struct MoveSystem : public ISystem
 
 	virtual void OnInitialize(Pool& pool) override
 	{
+		// Definir a qual pool o Group se refere.
 		group.SetPool(pool);
+
+		// Quando uma entidade é criada pela pool, 
+		// todos os Groups associados a essa pool sao notificados,
+		// se a entidade for compativel com as condiçoes definidas,
+		// é juntada ao group.
 		group.OneOf<Position>();
 		group.OneOf<Movement>();
 	}
@@ -45,6 +51,7 @@ struct MoveSystem : public ISystem
 		int size = group.Size();
 		for (size_t i = 0; i < size; i++)
 		{
+			// Pode-se iterar por todas as entidades relevantes ao group.
 			auto entity = group[i];
 
 			// Do whatever with entity.
@@ -60,9 +67,12 @@ struct MoveSystem : public ISystem
 int main() {
 	sf::Window window(sf::VideoMode(800, 600), "OpenGL");
 
+	// Inicializar a pool e adicionar o sistema de exemplo MoveSystem.
 	Pool pool;
 	pool.AddSystem<MoveSystem>();
 
+	// Criar entity usando o metodo da Pool. A Pool adiciona a entidade a uma lista
+	// e notifica todos os sistemas que foi adicionado uma nova entidade.
 	EntityPtr entity = pool.CreateEntity();
 	entity->Add<Position>(0, 0);
 	entity->Add<Movement>();
@@ -83,6 +93,7 @@ int main() {
 			}
 		}
 
+		// Executa todos os sistemas.
 		pool.Execute();
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
