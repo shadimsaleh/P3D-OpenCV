@@ -7,10 +7,27 @@
 #include <Lagswitch\ECS\Subject.h>
 #include <Lagswitch\ECS\Group.h>
 #include <memory>
+#include <Content\ContentLoader.h>
+#include <Graphics\Shader.h>
+#include <Graphics\VertexArray.h>
+#include <Graphics\BufferLayout.h>
+#include <Graphics\Vertex\VertexPositionColor.h>
+#include <Graphics\Mesh.h>
 
 struct Movement : public IComponent
 {
 	float dir;
+
+	virtual void Reset() override
+	{
+	}
+};
+
+struct MeshRenderer : public IComponent
+{
+	MeshRenderer(Mesh& mesh) : mesh(mesh) { }
+
+	Mesh mesh;
 
 	virtual void Reset() override
 	{
@@ -29,21 +46,14 @@ struct Position : public IComponent
 	}
 };
 
-struct MoveSystem : public ISystem
+struct RenderSystem : public ISystem
 {
 	Group group;
 
 	virtual void OnInitialize(Pool& pool) override
 	{
-		// Definir a qual pool o Group se refere.
 		group.SetPool(pool);
-
-		// Quando uma entidade é criada pela pool, 
-		// todos os Groups associados a essa pool sao notificados,
-		// se a entidade for compativel com as condiçoes definidas,
-		// é juntada ao group.
-		group.OneOf<Position>();
-		group.OneOf<Movement>();
+		group.AllOf<MeshRenderer>();
 	}
 
 	virtual void OnExecute() override
@@ -51,10 +61,9 @@ struct MoveSystem : public ISystem
 		int size = group.Size();
 		for (size_t i = 0; i < size; i++)
 		{
-			// Pode-se iterar por todas as entidades relevantes ao group.
-			auto entity = group[i];
+			auto meshRenderer = group[i]->Get<MeshRenderer>();
 
-			// Do whatever with entity.
+			meshRenderer->mesh.Draw();
 		}
 	}
 
@@ -66,16 +75,42 @@ struct MoveSystem : public ISystem
 #if 1
 int main() {
 	sf::Window window(sf::VideoMode(800, 600), "OpenGL");
+	ContentLoader content;
 
-	// Inicializar a pool e adicionar o sistema de exemplo MoveSystem.
+	glewExperimental = GL_TRUE;
+	glewInit();
+
 	Pool pool;
-	pool.AddSystem<MoveSystem>();
+	pool.AddSystem<RenderSystem>();
 
-	// Criar entity usando o metodo da Pool. A Pool adiciona a entidade a uma lista
-	// e notifica todos os sistemas que foi adicionado uma nova entidade.
+	auto vao = std::make_shared<VertexArray>();
+	vao->Bind();
+
+	std::vector<VertexPositionColor> vertices{
+		VertexPositionColor(0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f),
+		VertexPositionColor(0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f),
+		VertexPositionColor(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f),
+		VertexPositionColor(-0.5f, 0.5f, 0.0f, 0.5f, 0.25f, 0.5f, 1.0f)
+	};
+
+	std::vector<unsigned int> indices{
+		0, 1, 3,
+		1, 2, 3
+	};
+
+	vao->Push(vertices, GL_STATIC_DRAW);
+	vao->SetIndices(indices, GL_STATIC_DRAW);
+
+	vao->Unbind();
+
+	content.Load<Mesh>("mesh")->SetVertexArray(vao);
+
 	EntityPtr entity = pool.CreateEntity();
-	entity->Add<Position>(0, 0);
-	entity->Add<Movement>();
+	entity->Add<MeshRenderer>(*content.Load<Mesh>("mesh"));
+
+	auto shader = content.Load<Shader>("resources/test");
+
+	shader->Use();
 
 	bool running = true;
 	while (running)
@@ -93,18 +128,9 @@ int main() {
 			}
 		}
 
-		// Executa todos os sistemas.
-		pool.Execute();
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glBegin(GL_TRIANGLES);
-
-		glVertex3f(0.5, 0.5, 0);
-		glVertex3f(1.0, -0.5, 0);
-		glVertex3f(0, -0.5, 0);
-
-		glEnd();
+		pool.Execute();
 
 		window.display();
 	}

@@ -166,12 +166,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Content\ContentLoader.cpp" />
+    <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
+    <ClCompile Include="src\Graphics\BufferLayout.cpp" />
+    <ClCompile Include="src\Graphics\LayoutMapper.cpp" />
+    <ClCompile Include="src\Graphics\Mesh.cpp" />
+    <ClCompile Include="src\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Content\ContentLoader.h" />
     <ClInclude Include="src\Content\IContent.h" />
+    <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />
+    <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h" />
+    <ClInclude Include="src\Graphics\BufferLayout.h" />
+    <ClInclude Include="src\Graphics\LayoutMapper.h" />
+    <ClInclude Include="src\Graphics\Mesh.h" />
+    <ClInclude Include="src\Graphics\Shader.h" />
+    <ClInclude Include="src\Graphics\VertexArray.h" />
+    <ClInclude Include="src\Graphics\Vertex\VertexPosition.h" />
+    <ClInclude Include="src\Graphics\Vertex\VertexPositionColor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

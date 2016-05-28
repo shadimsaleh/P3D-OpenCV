@@ -3,5 +3,5 @@
 
 struct IContent
 {
-	virtual void Load(const std::string& filename) = 0;
+	virtual bool Load(const std::string& filename) = 0;
 };

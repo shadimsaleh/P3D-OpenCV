@@ -21,7 +21,7 @@ public:
 	void Remove();
 
 	template <typename T>
-	ComponentPtr Get();
+	std::shared_ptr<T> Get();
 
 	template <typename T>
 	bool Has();
@@ -47,9 +47,9 @@ inline void Entity::Remove()
 }
 
 template<typename T>
-inline ComponentPtr Entity::Get()
+inline std::shared_ptr<T> Entity::Get()
 {
-	return components[ComponentType::Get<T>()];
+	return std::static_pointer_cast<T>(components[ComponentType::Get<T>()]);
 
 }
 template<typename T>
