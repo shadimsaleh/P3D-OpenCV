@@ -74,5 +74,8 @@
     <ClInclude Include="src\Graphics\Vertex\VertexPositionColor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Components\Graphics\MeshRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

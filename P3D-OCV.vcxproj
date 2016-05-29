@@ -176,6 +176,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Components\Graphics\MeshRenderer.h" />
     <ClInclude Include="src\Content\ContentLoader.h" />
     <ClInclude Include="src\Content\IContent.h" />
     <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />

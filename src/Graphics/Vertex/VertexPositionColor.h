@@ -1,10 +1,12 @@
 #pragma once
 #include <Graphics\LayoutMapper.h>
 #include <Graphics\BufferLayout.h>
+#include <glm\vec3.hpp>
+#include <glm\vec4.hpp>
 
 struct VertexPositionColor
 {
-	VertexPositionColor(float x, float y, float z, float r, float g, float b, float a) : x(x), y(y), z(z), r(r), g(g), b(b), a(a)
+	VertexPositionColor(const glm::vec3& pos, const glm::vec4& color) : position(pos), color(color)
 	{
 		if (LayoutMapper::GetLayout<VertexPositionColor>() == nullptr)
 		{
@@ -15,11 +17,6 @@ struct VertexPositionColor
 		}
 	}
 
-	float x;
-	float y;
-	float z;
-	float r;
-	float g;
-	float b;
-	float a;
+	glm::vec3 position;
+	glm::vec4 color;
 };

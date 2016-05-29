@@ -82,15 +82,16 @@ int main() {
 
 	Pool pool;
 	pool.AddSystem<RenderSystem>();
+	EntityPtr entity = pool.CreateEntity();
 
 	auto vao = std::make_shared<VertexArray>();
-	vao->Bind();
+	content.Load<Mesh>("mesh")->SetVertexArray(vao);
 
 	std::vector<VertexPositionColor> vertices{
-		VertexPositionColor(0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f),
-		VertexPositionColor(0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f),
-		VertexPositionColor(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f),
-		VertexPositionColor(-0.5f, 0.5f, 0.0f, 0.5f, 0.25f, 0.5f, 1.0f)
+		VertexPositionColor(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
+		VertexPositionColor(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
+		VertexPositionColor(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)),
+		VertexPositionColor(glm::vec3(-0.5f, 0.5f, 0.0f),glm::vec4(0.5f, 0.25f, 0.5f, 1.0f))
 	};
 
 	std::vector<unsigned int> indices{
@@ -98,18 +99,14 @@ int main() {
 		1, 2, 3
 	};
 
+	vao->Bind();
 	vao->Push(vertices, GL_STATIC_DRAW);
 	vao->SetIndices(indices, GL_STATIC_DRAW);
-
 	vao->Unbind();
 
-	content.Load<Mesh>("mesh")->SetVertexArray(vao);
-
-	EntityPtr entity = pool.CreateEntity();
 	entity->Add<MeshRenderer>(*content.Load<Mesh>("mesh"));
 
 	auto shader = content.Load<Shader>("resources/test");
-
 	shader->Use();
 
 	bool running = true;

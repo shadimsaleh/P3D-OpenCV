@@ -1,10 +1,11 @@
 #pragma once
 #include <GL/glew.h>
 #include <Graphics\LayoutMapper.h>
+#include <glm\vec3.hpp>
 
 struct VertexPosition
 {
-	VertexPosition(float x, float y, float z) : x(x), y(y), z(z) 
+	VertexPosition(const glm::vec3& position) : position(position)
 	{
 		if (LayoutMapper::GetLayout<VertexPosition>() == nullptr) 
 		{
@@ -14,7 +15,5 @@ struct VertexPosition
 		}
 	}
 
-	float x;
-	float y;
-	float z;
+	glm::vec3 position;
 };
