@@ -175,6 +175,7 @@
     <ClCompile Include="src\Graphics\Shader.cpp" />
     <ClCompile Include="src\Graphics\VertexArray.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Systems\MeshRenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Graphics\MeshRenderer.h" />
@@ -190,6 +191,7 @@
     <ClInclude Include="src\Graphics\VertexArray.h" />
     <ClInclude Include="src\Graphics\Vertex\VertexPosition.h" />
     <ClInclude Include="src\Graphics\Vertex\VertexPositionColor.h" />
+    <ClInclude Include="src\Systems\MeshRenderSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
