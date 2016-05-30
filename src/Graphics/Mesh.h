@@ -11,6 +11,7 @@ public:
 
 	void SetVertexArray(VertexArrayPtr vao);
 	void Draw();
+	void Draw(GLenum mode);
 	VertexArrayPtr GetVertexArray();
 
 private:

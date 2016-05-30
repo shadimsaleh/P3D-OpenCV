@@ -1,10 +1,13 @@
 #version 330 core
 
-in vec4 fsColor;
+in FragData 
+{
+    vec4 color;    
+} inputData;
 
-out vec4 outColor;
+out vec4 color;
 
 void main()
 {
-    outColor = fsColor;
+    color = inputData.color;
 } 

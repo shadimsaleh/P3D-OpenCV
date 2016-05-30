@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include <fstream>
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader() : id(0)
 {
@@ -81,4 +82,39 @@ void Shader::Use()
 void Shader::Unuse()
 {
 	glUseProgram(0);
+}
+
+int Shader::GetUniformLocation(const std::string & name)
+{
+	return glGetUniformLocation(id, name.c_str());
+}
+
+void Shader::SetUniform(const std::string & name, const glm::mat4 & value)
+{
+	glUniformMatrix4fv(GetUniformLocation(name), 1, false, glm::value_ptr(value));
+}
+
+void Shader::SetUniform(const std::string & name, int value)
+{
+	glUniform1i(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniform(const std::string & name, float value)
+{
+	glUniform1f(GetUniformLocation(name), value);
+}
+
+void Shader::SetUniform(const std::string & name, const glm::vec2 & value)
+{
+	glUniform2fv(GetUniformLocation(name), 1, glm::value_ptr(value));
+}
+
+void Shader::SetUniform(const std::string & name, const glm::vec3 & value)
+{
+	glUniform3fv(GetUniformLocation(name), 1, glm::value_ptr(value));
+}
+
+void Shader::SetUniform(const std::string & name, const glm::vec4 & value)
+{
+	glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(value));
 }

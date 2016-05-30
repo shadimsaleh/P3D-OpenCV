@@ -12,8 +12,13 @@ void Mesh::SetVertexArray(VertexArrayPtr vao)
 
 void Mesh::Draw()
 {
+	Draw(GL_TRIANGLES);
+}
+
+void Mesh::Draw(GLenum mode)
+{
 	vao->Bind();
-	vao->Draw(GL_TRIANGLES, vao->GetIndexCount());
+	vao->Draw(mode, vao->GetIndexCount());
 	vao->Unbind();
 }
 
