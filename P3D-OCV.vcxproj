@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp" />
     <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Graphics\BufferLayout.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="src\Components\Graphics\MeshRenderer.h" />
     <ClInclude Include="src\Content\ContentLoader.h" />
     <ClInclude Include="src\Content\IContent.h" />
+    <ClInclude Include="src\Core\Game.h" />
     <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />
     <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Graphics\BufferLayout.h" />

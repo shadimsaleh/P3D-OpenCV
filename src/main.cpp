@@ -7,6 +7,7 @@
 #include <Lagswitch\ECS\Subject.h>
 #include <Lagswitch\ECS\Group.h>
 #include <memory>
+#include <Core\Game.h>
 #include <Content\ContentLoader.h>
 #include <Graphics\Shader.h>
 #include <Graphics\VertexArray.h>
@@ -83,19 +84,8 @@ struct RenderSystem : public ISystem
 	}
 };
 
-#if 1
-int main() {
-	sf::Window window(sf::VideoMode(800, 600), "OpenGL");
-	ContentLoader content;
-
-	glewExperimental = GL_TRUE;
-	glewInit();
-	glEnable(GL_DEPTH_TEST);
-
-	Pool pool;
-	pool.AddSystem<RenderSystem>();
-	EntityPtr entity = pool.CreateEntity();
-
+void Load(Game& game, ContentLoader& content)
+{
 	auto vao = std::make_shared<VertexArray>();
 	content.Load<Mesh>("mesh")->SetVertexArray(vao);
 
@@ -116,9 +106,15 @@ int main() {
 	vao->SetIndices(indices, GL_STATIC_DRAW);
 	vao->Unbind();
 
+	glEnable(GL_DEPTH_TEST);
+	Pool& pool = game.GetPool();
+	pool.AddSystem<RenderSystem>();
+	
 	auto shader = content.Load<Shader>("resources/test");
-	entity->Add<MeshRenderer>(*content.Load<Mesh>("mesh"), shader);
-	entity->Add<Position>(glm::vec3(0, 0, 0));
+
+	EntityPtr e = pool.CreateEntity();
+	e->Add<MeshRenderer>(*content.Load<Mesh>("mesh"), shader);
+	e->Add<Position>(glm::vec3(0, 0, 0));
 
 	glm::mat4 view;
 
@@ -127,31 +123,14 @@ int main() {
 	view = glm::translate(view, glm::vec3(0, 0, -3.0f));
 	shader->SetUniform("view", view);
 	shader->Unuse();
-
-	bool running = true;
-	while (running)
-	{
-		sf::Event event;
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-			{
-				running = false;
-			}
-			else if (event.type == sf::Event::Resized)
-			{
-				glViewport(0, 0, event.size.width, event.size.height);
-			}
-		}
-
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		pool.Execute();
-
-		window.display();
-	}
 }
-#endif
+
+int main() 
+{
+	Game game;
+	game.SetLoadFunction(Load);
+	game.Run(800, 600, "Hello World");
+}
 
 #if 0
 int main() {
