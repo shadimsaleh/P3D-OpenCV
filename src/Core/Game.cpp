@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <GL\glew.h>
 #include <glm\mat4x4.hpp>
+#include <Graphics\Shader.h>
 
 Game::Game() : running(false), deltaTime(0.0f)
 {

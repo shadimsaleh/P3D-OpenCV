@@ -33,7 +33,6 @@ void Camera::Update()
 	{
 		transform = glm::mat4();
 		transform = glm::translate(transform, position);
-
 		glBindBuffer(GL_UNIFORM_BUFFER, ubo);
 		glBufferSubData(ubo, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(transform));
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
