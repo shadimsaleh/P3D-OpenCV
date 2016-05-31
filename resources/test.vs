@@ -3,14 +3,18 @@
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec4 color;
 
+layout (std140) uniform Matrices
+{
+    mat4 projection;
+    mat4 view;  
+};
+
 out FragData
 {
     vec4 color;
 } fragData;
 
 uniform mat4 model;
-uniform mat4 view;
-uniform mat4 projection;
 
 void main() 
 {

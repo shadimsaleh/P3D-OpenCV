@@ -33,6 +33,9 @@ bool Shader::Load(const std::string & filename)
 	glDeleteShader(vs);
 	glDeleteShader(fs);
 
+	GLuint uniformMatricesBlock = glGetUniformBlockIndex(id, "Matrices");
+	glUniformBlockBinding(id, uniformMatricesBlock, 0);
+
 	return true;
 }
 

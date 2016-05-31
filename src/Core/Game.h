@@ -2,6 +2,7 @@
 #include <Content\ContentLoader.h>
 #include <SFML\Graphics.hpp>
 #include <Lagswitch\ECS\Pool.h>	
+#include <Graphics\Camera.h>
 
 class Game
 {
@@ -29,6 +30,7 @@ private:
 	sf::Window window;
 	Pool pool;
 	ContentLoader contentLoader;
+	Camera camera;
 	float deltaTime;
 	bool running;
 };

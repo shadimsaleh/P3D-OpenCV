@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <GL\glew.h>
+#include <glm\mat4x4.hpp>
 
 Game::Game() : running(false), deltaTime(0.0f)
 {
@@ -15,6 +16,10 @@ void Game::Run(int width, int height, const std::string& title)
 
 	glewExperimental = GL_TRUE;
 	glewInit();
+
+	camera.Initialize();
+	camera.SetPerspective(45.0f, width, height);
+	camera.SetPosition(glm::vec3(0, 0, -3));
 
 	if (LoadFunc != nullptr)
 		LoadFunc(*this, contentLoader);
@@ -53,6 +58,7 @@ void Game::Run(int width, int height, const std::string& title)
 
 void Game::PreUpdateInternal()
 {
+	camera.Update();
 }
 
 void Game::PostUpdateInternal()
