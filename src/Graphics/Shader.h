@@ -24,6 +24,7 @@ public:
 	void SetUniform(const std::string& name, const glm::vec2& value);
 	void SetUniform(const std::string& name, const glm::vec3& value);
 	void SetUniform(const std::string& name, const glm::vec4& value);
+	GLuint GetProgram();
 	
 private:
 	GLuint id;

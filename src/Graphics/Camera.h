@@ -12,8 +12,10 @@ public:
 	void Initialize();
 	void Update();
 	void SetPosition(const glm::vec3& position);
+	void SetRotation(const glm::vec3& rotation);
 	void SetPerspective(float fov, int width, int height, float near = 0.1f, float far = 1000.0f);
-
+	
+	static void SetActive(Camera* camera);
 	static Camera* GetActive();
 
 private:
@@ -22,7 +24,6 @@ private:
 	static Camera* activeCamera;
 
 	glm::vec3 position;
-	glm::mat4 transform;
-	glm::mat4 projection;
+	glm::vec3 rotation;
 	bool needsUpdate;
 };

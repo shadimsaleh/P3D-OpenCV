@@ -118,3 +118,8 @@ void Shader::SetUniform(const std::string & name, const glm::vec4 & value)
 {
 	glUniform4fv(GetUniformLocation(name), 1, glm::value_ptr(value));
 }
+
+GLuint Shader::GetProgram()
+{
+	return id;
+}

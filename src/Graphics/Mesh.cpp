@@ -5,11 +5,6 @@ bool Mesh::Load(const std::string & filename)
 	return true;
 }
 
-void Mesh::SetVertexArray(VertexArrayPtr vao)
-{
-	this->vao = vao;
-}
-
 void Mesh::Draw()
 {
 	Draw(GL_TRIANGLES);
@@ -17,12 +12,14 @@ void Mesh::Draw()
 
 void Mesh::Draw(GLenum mode)
 {
-	vao->Bind();
-	vao->Draw(mode, vao->GetIndexCount());
-	vao->Unbind();
+	vao.Bind();
+	vao.Draw(mode, vao.GetIndexCount());
+	vao.Unbind();
 }
 
-VertexArrayPtr Mesh::GetVertexArray()
+void Mesh::SetIndices(std::vector<unsigned int>& indices)
 {
-	return vao;
+	vao.Bind();
+	vao.SetIndices(indices, GL_STATIC_DRAW);
+	vao.Unbind();
 }

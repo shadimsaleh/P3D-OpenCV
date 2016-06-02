@@ -2,6 +2,8 @@
 #include <GL\glew.h>
 #include <glm\mat4x4.hpp>
 #include <Graphics\Shader.h>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
 
 Game::Game() : running(false), deltaTime(0.0f)
 {
@@ -19,8 +21,7 @@ void Game::Run(int width, int height, const std::string& title)
 	glewInit();
 
 	camera.Initialize();
-	camera.SetPerspective(45.0f, width, height);
-	camera.SetPosition(glm::vec3(0, 0, -3));
+	camera.SetPerspective(45.0f, width, height, 0.1f, 1000.0f);
 
 	if (LoadFunc != nullptr)
 		LoadFunc(*this, contentLoader);
@@ -101,4 +102,9 @@ Pool & Game::GetPool()
 ContentLoader & Game::GetContentLoader()
 {
 	return contentLoader;
+}
+
+sf::RenderWindow & Game::GetWindow()
+{
+	return window;
 }

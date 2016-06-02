@@ -16,6 +16,7 @@ public:
 	void SetRenderFunction(void(*RenderFunc)(Game&, float));
 	Pool& GetPool();
 	ContentLoader& GetContentLoader();
+	sf::RenderWindow& GetWindow();
 
 private:
 	void PreUpdateInternal();
@@ -27,7 +28,7 @@ private:
 	void(*UpdateFunc)(Game&, float);
 	void(*RenderFunc)(Game&, float);
 
-	sf::Window window;
+	sf::RenderWindow window;
 	Pool pool;
 	ContentLoader contentLoader;
 	Camera camera;

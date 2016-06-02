@@ -86,44 +86,37 @@ struct RenderSystem : public ISystem
 
 void Load(Game& game, ContentLoader& content)
 {	
-	auto vao = std::make_shared<VertexArray>();
-	content.Load<Mesh>("mesh")->SetVertexArray(vao);
+	glEnable(GL_DEPTH_TEST);
 
-	std::vector<VertexPositionColor> vertices{
+	auto mesh = content.Load<Mesh>("mesh");
+
+	mesh->SetVertices(std::vector<VertexPositionColor> {
 		VertexPositionColor(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
 		VertexPositionColor(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
 		VertexPositionColor(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)),
-		VertexPositionColor(glm::vec3(-0.5f, 0.5f, 0.0f),glm::vec4(0.5f, 0.25f, 0.5f, 1.0f))
-	};
+		VertexPositionColor(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec4(0.5f, 0.25f, 0.5f, 1.0f))
+	});
 
-	std::vector<unsigned int> indices{
+	mesh->SetIndices(std::vector<unsigned int> {
 		0, 1, 3,
 		1, 2, 3
-	};
+	});
 
-	vao->Bind();
-	vao->Push(vertices, GL_STATIC_DRAW);
-	vao->SetIndices(indices, GL_STATIC_DRAW);
-	vao->Unbind();
-
-	glEnable(GL_DEPTH_TEST);
 	Pool& pool = game.GetPool();
 	pool.AddSystem<RenderSystem>();
-	
-	auto shader = content.Load<Shader>("resources/test");
 
 	EntityPtr e = pool.CreateEntity();
-	e->Add<MeshRenderer>(*content.Load<Mesh>("mesh"), shader);
+	e->Add<MeshRenderer>(*mesh, content.Load<Shader>("resources/test"));
 	e->Add<Position>(glm::vec3(0, 0, 0));
 
-	glm::mat4 view;
+	Camera::GetActive()->SetPosition(glm::vec3(0, 0, -3));
 }
 
 int main() 
 {
 	Game game;
 	game.SetLoadFunction(Load);
-	game.Run(800, 600, "Hello World");
+	game.Run(1280, 720, "Hello World");
 }
 
 #if 0
