@@ -7,5 +7,6 @@ struct ISystem
 
 	virtual void OnInitialize(Pool& pool) = 0;
 	virtual void OnExecute() = 0;
+	virtual void OnRender() = 0;
 	virtual void OnDispose() = 0;
 };

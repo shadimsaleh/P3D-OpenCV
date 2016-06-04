@@ -1,122 +1,109 @@
-#include <iostream>
-#include <SFML\Graphics.hpp>
-#include <GL\glew.h>
-#include <Lagswitch\ECS\Pool.h>
-#include <Lagswitch\ECS\Entity.h>
-#include <Lagswitch\ECS\IObserver.h>
-#include <Lagswitch\ECS\Subject.h>
-#include <Lagswitch\ECS\Group.h>
-#include <memory>
 #include <Core\Game.h>
-#include <Content\ContentLoader.h>
-#include <Graphics\Shader.h>
-#include <Graphics\VertexArray.h>
-#include <Graphics\BufferLayout.h>
-#include <Graphics\Vertex\VertexPositionColor.h>
-#include <Graphics\Mesh.h>
-#include <glm\gtc\matrix_transform.hpp>
-#include <glm\glm.hpp>
+#include <Content\MeshData.h>
+#include <Components\Transform.h>
+#include <Components\Mesh.h>
+#include <Systems\MeshSystem.h>
+#include <imgui\imgui.h>
+#include <imgui-sfml\imgui-SFML.h>
+#include <Data\LimitedQueue.h>
+#include <Debug\Console.h>
 
-struct Movement : public IComponent
+void DeveloperSettings()
 {
-	float dir;
 
-	virtual void Reset() override
-	{
-	}
-};
-
-struct MeshRenderer : public IComponent
-{
-	MeshRenderer(Mesh& mesh, std::shared_ptr<Shader> shader) : mesh(mesh), shader(shader) { }
-
-	Mesh mesh;
-	std::shared_ptr<Shader> shader;
-
-	virtual void Reset() override
-	{
-	}
-};
-
-struct Position : public IComponent
-{
-	glm::vec3 position;
-
-	Position(const glm::vec3& pos) : position(pos) { }
-	Position() { }
-
-	virtual void Reset() override
-	{
-	}
-};
-
-struct RenderSystem : public ISystem
-{
-	Group group;
-
-	virtual void OnInitialize(Pool& pool) override
-	{
-		group.SetPool(pool);
-		group.AllOf<MeshRenderer>();
-		group.AllOf<Position>();
-	}
-
-	virtual void OnExecute() override
-	{
-		int size = group.Size();
-		for (size_t i = 0; i < size; i++)
-		{
-			auto meshRenderer = group[i]->Get<MeshRenderer>();
-			auto position = group[i]->Get<Position>();
-
-			glm::mat4 transform;
-			transform = glm::translate(transform, position->position);
-
-			meshRenderer->shader->Use();
-			meshRenderer->shader->SetUniform("model", transform);
-			meshRenderer->mesh.Draw(GL_TRIANGLES);
-			meshRenderer->shader->Unuse();
-		}
-	}
-
-	virtual void OnDispose() override
-	{
-	}
-};
-
-void Load(Game& game, ContentLoader& content)
-{	
-	glEnable(GL_DEPTH_TEST);
-
-	auto mesh = content.Load<Mesh>("mesh");
-
-	mesh->SetVertices(std::vector<VertexPositionColor> {
-		VertexPositionColor(glm::vec3(0.5f, 0.5f, 0.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f)),
-		VertexPositionColor(glm::vec3(0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)),
-		VertexPositionColor(glm::vec3(-0.5f, -0.5f, 0.0f), glm::vec4(0.0f, 0.0f, 1.0f, 1.0f)),
-		VertexPositionColor(glm::vec3(-0.5f, 0.5f, 0.0f), glm::vec4(0.5f, 0.25f, 0.5f, 1.0f))
-	});
-
-	mesh->SetIndices(std::vector<unsigned int> {
-		0, 1, 3,
-		1, 2, 3
-	});
-
-	Pool& pool = game.GetPool();
-	pool.AddSystem<RenderSystem>();
-
-	EntityPtr e = pool.CreateEntity();
-	e->Add<MeshRenderer>(*mesh, content.Load<Shader>("resources/test"));
-	e->Add<Position>(glm::vec3(0, 0, 0));
-
-	Camera::GetActive()->SetPosition(glm::vec3(0, 0, -3));
 }
 
-int main() 
+void DeveloperConsole()
+{
+	static Console* console = Console::Instance();
+	console->Draw();
+}
+
+void DebugOverlay(Game& game)
+{
+	ImGui::SetNextWindowPos(ImVec2(10, 10));
+	ImGui::SetNextWindowContentWidth(350);
+	ImGui::Begin("DebugOverlay", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings);
+
+	ImGui::Text("Developer Debug Data");
+	ImGui::Separator();
+	ImGui::Text("Mouse Position (Screen): (%.1f,%.1f)", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+	ImGui::Text("Frames Per Second: %i", game.GetFramesPerSecond());
+	
+	static LimitedQueue<float> queue(25);
+	static float interval = 0.10f;
+	interval += game.GetDeltaTime();
+	
+	if (interval > 0.10f || queue.Count() < queue.Maximum()) 
+	{
+		queue.Push(game.GetDeltaTime());
+		interval = 0.0f;
+	}
+
+	ImGui::PlotLines("frame time", queue.Data(), queue.Size());
+
+	static bool console = false;
+	
+	if (ImGui::Button("Console"))
+		console = !console;
+
+	if (console) 
+		DeveloperConsole();
+
+	ImGui::SameLine();
+
+	static bool settings = false;
+
+	if (ImGui::Button("Settings"))
+		settings = !settings;
+
+	if (settings)
+		DeveloperSettings();
+
+	ImGui::End();
+}
+
+void Load(Game& game, ContentLoader& loader)
+{
+	Pool& pool = game.GetPool();
+	pool.AddSystem<MeshSystem>();
+
+	auto mesh = loader.Load<MeshData>("test");
+	mesh->SetVertices(std::vector<Vertex> {
+		Vertex(glm::vec3(0, 1.0f, 0), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(1.0f, -1.0f, 0), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, -1.0f, 0), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1))
+	}, PrimitiveType::Triangles);
+
+	auto e = pool.CreateEntity();
+	e->Add<Mesh>(mesh);
+	e->Add<Transform>();
+}
+
+void Update(Game& game, float deltaTime)
+{
+
+}
+
+void Render(Game& game, float deltaTime)
+{
+}
+
+void OnGUI(Game& game, sf::RenderWindow& window)
+{
+	DebugOverlay(game);
+}
+
+int main()
 {
 	Game game;
 	game.SetLoadFunction(Load);
-	game.Run(1280, 720, "Hello World");
+	game.SetUpdateFunction(Update);
+	game.SetRenderFunction(Render);
+	game.SetGUIFunction(OnGUI);
+	game.Run(1280, 720, "OpenCV");
+
+	return 0;
 }
 
 #if 0
@@ -128,11 +115,13 @@ int main() {
 
 	namedWindow("window", 1);
 
-	while (1) {
+	while (1) 
+	{
 		cap >> image;
 		imshow("window", image);
 		waitKey(33);
 	}
+
 	return 0;
 }
 #endif

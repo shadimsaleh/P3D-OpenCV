@@ -1,12 +1,22 @@
 #include "Game.h"
 #include <GL\glew.h>
 #include <glm\mat4x4.hpp>
-#include <Graphics\Shader.h>
 #include <glm\gtc\matrix_transform.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <imgui\imgui.h>
+#include <imgui-sfml\imgui-SFML.h>
+#include <Debug\Debug.h>
+#include <Debug\Console.h>
 
-Game::Game() : running(false), deltaTime(0.0f)
+Game* Game::instance = nullptr;
+
+Game::Game() : running(false), fpsTimer(0.0f), frameCount(0), framesPerSecond(0)
 {
+	assert(!instance);
+
+	if (!instance) {
+		instance = this;
+	}
 }
 
 Game::~Game()
@@ -17,11 +27,36 @@ void Game::Run(int width, int height, const std::string& title)
 {
 	window.create(sf::VideoMode(width, height), title);
 
+	Print("Window initialized succesfully.", false);
+	
 	glewExperimental = GL_TRUE;
-	glewInit();
+	GLenum err = glewInit();
+	
+	if (err != GLEW_OK)
+	{
+		Error(std::string((const char*)glewGetErrorString(err)));
+	}
 
-	camera.Initialize();
-	camera.SetPerspective(45.0f, width, height, 0.1f, 1000.0f);
+	Print("", false);
+	Print("Glew initialized successfully.", false);
+	Print((const char*)glGetString(GL_VENDOR), false);
+	Print((const char*)glGetString(GL_RENDERER), false);
+	Print((const char*)glGetString(GL_VERSION), false);
+	Print(std::string("Shading Language: " + std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION))), false);
+	Print("", false);
+
+	ImGui::SFML::Init(window);
+
+	Print("GUI module is safe and sound.", false);
+
+	Console* console = Console::Instance();
+	console->RegisterCommand("quit", Game::QuitCallback);
+	console->RegisterCommand("info", Game::WindowInfoCallback);
+	console->RegisterCommand("help", Game::HelpCallback);
+
+	Print("Hello, welcome!", true);
+	Print("Brought to you with <3 by Lagswitch Games.", true);
+	Print("Type 'help' for a list of available commands", true);
 
 	if (LoadFunc != nullptr)
 		LoadFunc(*this, contentLoader);
@@ -32,6 +67,7 @@ void Game::Run(int width, int height, const std::string& title)
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
+			ImGui::SFML::ProcessEvent(event);
 			if (event.type == sf::Event::Closed)
 			{
 				running = false;
@@ -45,27 +81,32 @@ void Game::Run(int width, int height, const std::string& title)
 		PreUpdateInternal();
 		
 		if (UpdateFunc != nullptr)
-			UpdateFunc(*this, deltaTime);
+			UpdateFunc(*this, deltaTime.asSeconds());
 
 		PostUpdateInternal();
 
 		PreRenderInternal();
 
 		if (RenderFunc != nullptr)
-			RenderFunc(*this, deltaTime);
+			RenderFunc(*this, deltaTime.asSeconds());
 
 		PostRenderInternal();
 	}
+
+	Print("Shutting down, see you later!", true);
+
+	ImGui::SFML::Shutdown();
 }
 
 void Game::PreUpdateInternal()
 {
-	camera.Update();
+	clock.restart();
+	ImGui::SFML::Update();
 }
 
 void Game::PostUpdateInternal()
 {
-	
+	pool.Execute();
 }
 
 void Game::PreRenderInternal()
@@ -75,8 +116,27 @@ void Game::PreRenderInternal()
 
 void Game::PostRenderInternal()
 {
-	pool.Execute();
+	pool.Render();
+
+	window.pushGLStates();
+
+	if (GUIFunc != nullptr)
+		GUIFunc(*this, window);
+
+	ImGui::Render();
+	window.popGLStates();
 	window.display();
+
+	deltaTime = clock.restart();
+	fpsTimer += deltaTime.asSeconds();
+	frameCount++;
+	
+	if (fpsTimer >= 1.0f)
+	{
+		framesPerSecond = frameCount;
+		fpsTimer = 0.0f;
+		frameCount = 0;
+	}
 }
 
 void Game::SetLoadFunction(void(*LoadFunc)(Game&, ContentLoader &))
@@ -94,6 +154,11 @@ void Game::SetRenderFunction(void(*RenderFunc)(Game&, float))
 	this->RenderFunc = RenderFunc;
 }
 
+void Game::SetGUIFunction(void(*GUIFunc)(Game &, sf::RenderWindow &))
+{
+	this->GUIFunc = GUIFunc;
+}
+
 Pool & Game::GetPool()
 {
 	return pool;
@@ -107,4 +172,38 @@ ContentLoader & Game::GetContentLoader()
 sf::RenderWindow & Game::GetWindow()
 {
 	return window;
+}
+
+float Game::GetDeltaTime()
+{
+	return deltaTime.asSeconds();
+}
+
+int Game::GetFramesPerSecond()
+{
+	return framesPerSecond;
+}
+
+void Game::QuitCallback(Console* console, std::vector<std::string>& args)
+{
+	Print("Closing...", false);
+	instance->running = false;
+}
+
+void Game::WindowInfoCallback(Console * console, std::vector<std::string>& args)
+{
+	sf::Vector2u size = instance->window.getSize();
+	sf::ContextSettings settings = instance->window.getSettings();
+	
+	Print(std::string("Resolution: " + std::to_string(size.x) + "x" + std::to_string(size.y)), false);
+	Print(std::string("Anti-Aliasing: " + std::to_string(settings.antialiasingLevel) + "x"), false);
+	Print(std::string("Depth: " + std::to_string(settings.depthBits)), false);
+	Print(std::string("Stencil: " + std::to_string(settings.stencilBits)), false);
+	Print(std::string("OpenGL Context: " + std::to_string(settings.majorVersion) + "." + std::to_string(settings.minorVersion)), false);
+}
+
+void Game::HelpCallback(Console * console, std::vector<std::string>& args)
+{
+	Print("'quit': closes the application.", false);
+	Print("'info': prints window and OpenGL context settings.", false);
 }

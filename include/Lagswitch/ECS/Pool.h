@@ -15,6 +15,7 @@ public:
 	~Pool();
 
 	void Execute();
+	void Render();
 
 	template <typename T, typename... TArgs>
 	void AddSystem(TArgs... args);

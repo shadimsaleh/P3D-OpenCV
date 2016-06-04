@@ -73,28 +73,28 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\Intermediates\</IntDir>
-    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(SolutionDir)Entitas\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\;$(SolutionDir)lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\Intermediates\</IntDir>
-    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(SolutionDir)Entitas\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\;$(SolutionDir)lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\Intermediates\</IntDir>
-    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(SolutionDir)Entitas\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\;$(SolutionDir)lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\Intermediates\</IntDir>
-    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(SolutionDir)Entitas\;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)include\;$(SolutionDir)src\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)lib\;$(SolutionDir)lib\$(Configuration)\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -166,34 +166,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Content\MeshData.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\IndexBuffer.cpp" />
-    <ClCompile Include="src\Graphics\Buffers\VertexBuffer.cpp" />
-    <ClCompile Include="src\Graphics\BufferLayout.cpp" />
+    <ClCompile Include="src\Debug\Console.cpp" />
     <ClCompile Include="src\Graphics\Camera.cpp" />
-    <ClCompile Include="src\Graphics\LayoutMapper.cpp" />
-    <ClCompile Include="src\Graphics\Mesh.cpp" />
-    <ClCompile Include="src\Graphics\Shader.cpp" />
-    <ClCompile Include="src\Graphics\VertexArray.cpp" />
+    <ClCompile Include="src\imgui\imgui-SFML.cpp" />
+    <ClCompile Include="src\imgui\imgui.cpp" />
+    <ClCompile Include="src\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\Systems\MeshRenderSystem.cpp" />
+    <ClCompile Include="src\Systems\MeshSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Components\Graphics\MeshRenderer.h" />
+    <ClInclude Include="src\Components\Mesh.h" />
+    <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\Content\ContentLoader.h" />
     <ClInclude Include="src\Content\IContent.h" />
+    <ClInclude Include="src\Content\MeshData.h" />
     <ClInclude Include="src\Core\Game.h" />
-    <ClInclude Include="src\Graphics\Buffers\IndexBuffer.h" />
-    <ClInclude Include="src\Graphics\Buffers\VertexBuffer.h" />
-    <ClInclude Include="src\Graphics\BufferLayout.h" />
+    <ClInclude Include="src\Data\LimitedQueue.h" />
+    <ClInclude Include="src\Debug\Console.h" />
+    <ClInclude Include="src\Debug\Debug.h" />
     <ClInclude Include="src\Graphics\Camera.h" />
-    <ClInclude Include="src\Graphics\LayoutMapper.h" />
-    <ClInclude Include="src\Graphics\Mesh.h" />
-    <ClInclude Include="src\Graphics\Shader.h" />
-    <ClInclude Include="src\Graphics\VertexArray.h" />
-    <ClInclude Include="src\Graphics\Vertex\VertexPosition.h" />
-    <ClInclude Include="src\Graphics\Vertex\VertexPositionColor.h" />
-    <ClInclude Include="src\Systems\MeshRenderSystem.h" />
+    <ClInclude Include="src\Graphics\Vertex.h" />
+    <ClInclude Include="src\imgui\imconfig.h" />
+    <ClInclude Include="src\imgui\imgui.h" />
+    <ClInclude Include="src\imgui\imgui_internal.h" />
+    <ClInclude Include="src\imgui\stb_rect_pack.h" />
+    <ClInclude Include="src\imgui\stb_textedit.h" />
+    <ClInclude Include="src\imgui\stb_truetype.h" />
+    <ClInclude Include="src\Systems\MeshSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
