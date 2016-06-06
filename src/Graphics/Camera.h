@@ -1,5 +1,6 @@
 #pragma once
 #include <glm\vec3.hpp>
+#include <Debug\Console.h>
 
 class Camera
 {
@@ -15,4 +16,8 @@ public:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 lookAt;
+
+private:
+	static void CameraCommandCallback(Console* console, std::vector<std::string>& args);
+	static bool callbacks;
 };
