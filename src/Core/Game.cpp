@@ -26,11 +26,14 @@ Game::~Game()
 void Game::Run(int width, int height, const std::string& title)
 {
 	window.create(sf::VideoMode(width, height), title);
-
+	
 	Print("Window initialized succesfully.", false);
 	
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
+
+	camera.SetPerspective(45.0f, (float)width / (float)height, 0.1f, 1000.0f);
+	camera.position = glm::vec3(0, 0, -3);
 	
 	if (err != GLEW_OK)
 	{

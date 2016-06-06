@@ -2,6 +2,7 @@
 #include <Content\ContentLoader.h>
 #include <SFML\Graphics.hpp>
 #include <Lagswitch\ECS\Pool.h>
+#include <Graphics\Camera.h>
 
 class Console;
 
@@ -35,6 +36,7 @@ private:
 	void(*RenderFunc)(Game&, float);
 	void(*GUIFunc)(Game&, sf::RenderWindow&);
 
+	Camera camera;
 	sf::Clock clock;
 	sf::Time deltaTime;
 	sf::RenderWindow window;

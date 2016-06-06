@@ -11,8 +11,7 @@ public:
 
 	void SetPerspective(float fov, float aspectRatio, float near, float far);
 	void LookAt(glm::vec3 up);
-	
-private:
+
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 lookAt;
