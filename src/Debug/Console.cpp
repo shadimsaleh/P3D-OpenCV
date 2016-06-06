@@ -126,6 +126,11 @@ void Console::Print(const std::string& string, bool highlight)
 	scrollToBottom = true;
 }
 
+void Console::PrintLine()
+{
+	Print("", false);
+}
+
 void Console::Error(const std::string& string)
 {
 	log.push_back("[error] " + string);

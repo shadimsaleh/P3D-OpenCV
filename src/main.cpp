@@ -2,7 +2,9 @@
 #include <Content\MeshData.h>
 #include <Components\Transform.h>
 #include <Components\Mesh.h>
+#include <Components\Tween.h>
 #include <Systems\MeshSystem.h>
+#include <Systems\TweenSystem.h>
 #include <imgui\imgui.h>
 #include <imgui-sfml\imgui-SFML.h>
 #include <Data\LimitedQueue.h>
@@ -67,6 +69,7 @@ void Load(Game& game, ContentLoader& loader)
 {
 	Pool& pool = game.GetPool();
 	pool.AddSystem<MeshSystem>();
+	pool.AddSystem<TweenSystem>();
 
 	auto mesh = loader.Load<MeshData>("test");
 	mesh->SetVertices(std::vector<Vertex> {

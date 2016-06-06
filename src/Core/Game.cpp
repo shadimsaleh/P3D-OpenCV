@@ -40,13 +40,13 @@ void Game::Run(int width, int height, const std::string& title)
 		Error(std::string((const char*)glewGetErrorString(err)));
 	}
 
-	Print("", false);
+	PrintLine();
 	Print("Glew initialized successfully.", false);
 	Print((const char*)glGetString(GL_VENDOR), false);
 	Print((const char*)glGetString(GL_RENDERER), false);
 	Print((const char*)glGetString(GL_VERSION), false);
 	Print(std::string("Shading Language: " + std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION))), false);
-	Print("", false);
+	PrintLine();
 
 	ImGui::SFML::Init(window);
 
@@ -185,6 +185,11 @@ float Game::GetDeltaTime()
 int Game::GetFramesPerSecond()
 {
 	return framesPerSecond;
+}
+
+Game * Game::Instance()
+{
+	return instance;
 }
 
 void Game::QuitCallback(Console* console, std::vector<std::string>& args)

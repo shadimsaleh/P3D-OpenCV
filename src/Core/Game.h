@@ -25,6 +25,8 @@ public:
 	float GetDeltaTime();
 	int GetFramesPerSecond();
 
+	static Game* Instance();
+
 private:
 	void PreUpdateInternal();
 	void PostUpdateInternal();

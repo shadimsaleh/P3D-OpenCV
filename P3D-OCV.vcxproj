@@ -176,14 +176,17 @@
     <ClCompile Include="src\imgui\imgui_draw.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Systems\MeshSystem.cpp" />
+    <ClCompile Include="src\Systems\TweenSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Components\Transform.h" />
+    <ClInclude Include="src\Components\Tween.h" />
     <ClInclude Include="src\Content\ContentLoader.h" />
     <ClInclude Include="src\Content\IContent.h" />
     <ClInclude Include="src\Content\MeshData.h" />
     <ClInclude Include="src\Core\Game.h" />
+    <ClInclude Include="src\Core\Math.h" />
     <ClInclude Include="src\Data\LimitedQueue.h" />
     <ClInclude Include="src\Debug\Console.h" />
     <ClInclude Include="src\Debug\Debug.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="src\imgui\stb_textedit.h" />
     <ClInclude Include="src\imgui\stb_truetype.h" />
     <ClInclude Include="src\Systems\MeshSystem.h" />
+    <ClInclude Include="src\Systems\TweenSystem.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

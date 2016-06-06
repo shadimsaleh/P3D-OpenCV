@@ -12,6 +12,7 @@ public:
 	void Draw();
 	void RegisterCommand(const std::string& command, void(*callback)(Console*, std::vector<std::string>&));
 	void Print(const std::string& string, bool highlight = false);
+	void PrintLine();
 	void Error(const std::string& string);
 	void ClearLog();
 
