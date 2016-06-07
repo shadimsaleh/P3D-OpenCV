@@ -166,6 +166,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CameraCapture\CamCapture.cpp" />
     <ClCompile Include="src\Content\MeshData.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Debug\Console.cpp" />
@@ -179,6 +180,8 @@
     <ClCompile Include="src\Systems\TweenSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CameraCapture\CamCapture.h" />
+    <ClInclude Include="src\CameraCapture\OpticalFlow.h" />
     <ClInclude Include="src\Components\Mesh.h" />
     <ClInclude Include="src\Components\Transform.h" />
     <ClInclude Include="src\Components\Tween.h" />

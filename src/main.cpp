@@ -169,14 +169,13 @@ void Update(Game& game, float deltaTime)
 
 void Render(Game& game, float deltaTime)
 {
+
 }
 
 void OnGUI(Game& game, sf::RenderWindow& window)
 {
 	DebugOverlay(game);
 }
-
-
 
 int main()
 {
