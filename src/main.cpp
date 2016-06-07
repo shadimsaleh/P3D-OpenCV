@@ -139,23 +139,27 @@ void Load(Game& game, ContentLoader& loader)
 	pool.AddSystem<MeshSystem>();
 	pool.AddSystem<TweenSystem>();
 
-	auto mesh = loader.Load<MeshData>("test");
-	mesh->SetVertices(std::vector<Vertex> {
-		Vertex(glm::vec3(0, 1.0f, 0), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(1.0f, -1.0f, 0), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(-1.0f, -1.0f, 0), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1))
-	}, PrimitiveType::Triangles);
 
 	auto cube = loader.Load<MeshData>("cubeWorld");
-	cube->SetVertices(CreatWorldCube(0.25),PrimitiveType::Lines);
+	cube->SetVertices(CreatWorldCube(0.25), PrimitiveType::Lines);
 
-	auto e = pool.CreateEntity();
-	e->Add<Mesh>(mesh);
-	e->Add<Transform>();
+	auto mesh = loader.Load<MeshData>("test");
+	mesh->SetVertices(std::vector<Vertex> {
+		Vertex(glm::vec3(1.0f, 1.0f, 1), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(1.0f, -1.0f, 1), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, -1.0f, 1), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, 1.0f, 1), glm::vec4(0.5, 0.5, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, -1.0f, 1), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(1.0f, 1.0f, 1), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1))
+	}, PrimitiveType::Triangles);
 
 	auto cubeEntity = pool.CreateEntity();
 	cubeEntity->Add<Mesh>(cube);
 	cubeEntity->Add<Transform>();
+
+	auto e = pool.CreateEntity();
+	e->Add<Mesh>(mesh);
+	e->Add<Transform>();
 }
 
 void Update(Game& game, float deltaTime)
