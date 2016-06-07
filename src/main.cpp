@@ -85,7 +85,6 @@ void Load(Game& game, ContentLoader& loader)
 
 void Update(Game& game, float deltaTime)
 {
-
 }
 
 void Render(Game& game, float deltaTime)
