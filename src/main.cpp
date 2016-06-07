@@ -65,6 +65,66 @@ void DebugOverlay(Game& game)
 	ImGui::End();
 }
 
+std::vector<Vertex> CreatWorldCube(float spacing, int linenumber)
+{
+	
+		std::vector<Vertex> data;
+
+//Z Lines
+		//BottomSide
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+		//TopSide
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+		//RightSide
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+		//LefttSide
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, 1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+//X Lines
+		//BottomLines
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+		//TopLines
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+
+//Y Lines
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(-1, -1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1, 1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+	
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			data.push_back(Vertex(glm::vec3(1, -1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(1, 1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+
+	return data;
+}
+
 void Load(Game& game, ContentLoader& loader)
 {
 	Pool& pool = game.GetPool();
@@ -78,9 +138,16 @@ void Load(Game& game, ContentLoader& loader)
 		Vertex(glm::vec3(-1.0f, -1.0f, 0), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1))
 	}, PrimitiveType::Triangles);
 
+	auto cube = loader.Load<MeshData>("cubeWorld");
+	cube->SetVertices(CreatWorldCube(0.5, 5),PrimitiveType::Lines);
+
 	auto e = pool.CreateEntity();
 	e->Add<Mesh>(mesh);
 	e->Add<Transform>();
+
+	auto cubeEntity = pool.CreateEntity();
+	cubeEntity->Add<Mesh>(cube);
+	cubeEntity->Add<Transform>();
 }
 
 void Update(Game& game, float deltaTime)
@@ -96,6 +163,8 @@ void OnGUI(Game& game, sf::RenderWindow& window)
 {
 	DebugOverlay(game);
 }
+
+
 
 int main()
 {
