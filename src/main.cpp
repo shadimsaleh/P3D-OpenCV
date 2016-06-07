@@ -10,6 +10,9 @@
 #include <Data\LimitedQueue.h>
 #include <Debug\Console.h>
 
+
+int Backgroundposition;
+
 void DeveloperSettings()
 {
 
@@ -65,22 +68,93 @@ void DebugOverlay(Game& game)
 	ImGui::End();
 }
 
+std::vector<Vertex> CreatWorldCube(float spacing, int depth)
+{
+	int linenumber, additionalVertLines = 4 * depth;
+	Backgroundposition = 1 + depth;
+	//aldrabice!
+	if (spacing <= 0.0625) { spacing = 0.0625; linenumber = 33; }
+	if (spacing > 0.0625 && spacing <= 0.125) { spacing = 0.125; linenumber = 17; }
+	if (spacing > 0.125 && spacing <= 0.25) { spacing = 0.25; linenumber = 9; }
+	if (spacing > 0.25 && spacing <= 0.5) { spacing = 0.5; linenumber = 5; }
+	if (spacing > 0.5 ) { spacing =1; linenumber = 3; }
+	//fim da aldrabice
+
+	std::vector<Vertex> data;
+
+
+		
+		for (size_t i = 0; i < linenumber; i++)
+		{
+			//Z Lines
+			//BottomSide
+			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, -1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+			//TopSide
+			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+			//RightSide
+			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+			//LefttSide
+			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}
+		
+
+		for (size_t i = 0; i < linenumber+additionalVertLines; i++)
+		{
+			//X Lines
+				//BottomLines
+				data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+				data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+				//TopLines
+				data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+				data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+			//Y Lines
+
+				data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+				data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+				data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+				data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		}	
+
+	return data;
+}
+
 void Load(Game& game, ContentLoader& loader)
 {
 	Pool& pool = game.GetPool();
 	pool.AddSystem<MeshSystem>();
 	pool.AddSystem<TweenSystem>();
 
+
+	auto cube = loader.Load<MeshData>("cubeWorld");
+	cube->SetVertices(CreatWorldCube(0.25,1), PrimitiveType::Lines);
+
 	auto mesh = loader.Load<MeshData>("test");
 	mesh->SetVertices(std::vector<Vertex> {
-		Vertex(glm::vec3(0, 1.0f, 0), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(1.0f, -1.0f, 0), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(-1.0f, -1.0f, 0), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1))
+		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(1.0f, -1.0f, Backgroundposition), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, 1.0f, Backgroundposition), glm::vec4(0.5, 0.5, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1))
 	}, PrimitiveType::Triangles);
 
 	auto e = pool.CreateEntity();
 	e->Add<Mesh>(mesh);
 	e->Add<Transform>();
+
+	auto cubeEntity = pool.CreateEntity();
+	cubeEntity->Add<Mesh>(cube);
+	cubeEntity->Add<Transform>();
 }
 
 void Update(Game& game, float deltaTime)
@@ -95,6 +169,8 @@ void OnGUI(Game& game, sf::RenderWindow& window)
 {
 	DebugOverlay(game);
 }
+
+
 
 int main()
 {
