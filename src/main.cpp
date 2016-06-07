@@ -3,12 +3,17 @@
 #include <Components\Transform.h>
 #include <Components\Mesh.h>
 #include <Components\Tween.h>
+#include <Components\BoxCollider.h>
+#include <Components\BallController.h>
 #include <Systems\MeshSystem.h>
 #include <Systems\TweenSystem.h>
 #include <imgui\imgui.h>
 #include <imgui-sfml\imgui-SFML.h>
 #include <Data\LimitedQueue.h>
 #include <Debug\Console.h>
+
+
+int Backgroundposition;
 
 void DeveloperSettings()
 {
@@ -31,12 +36,12 @@ void DebugOverlay(Game& game)
 	ImGui::Separator();
 	ImGui::Text("Mouse Position (Screen): (%.1f,%.1f)", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
 	ImGui::Text("Frames Per Second: %i", game.GetFramesPerSecond());
-	
+
 	static LimitedQueue<float> queue(25);
 	static float interval = 0.10f;
 	interval += game.GetDeltaTime();
-	
-	if (interval > 0.10f || queue.Count() < queue.Maximum()) 
+
+	if (interval > 0.10f || queue.Count() < queue.Maximum())
 	{
 		queue.Push(game.GetDeltaTime());
 		interval = 0.0f;
@@ -45,11 +50,11 @@ void DebugOverlay(Game& game)
 	ImGui::PlotLines("frame time", queue.Data(), queue.Size());
 
 	static bool console = false;
-	
+
 	if (ImGui::Button("Console"))
 		console = !console;
 
-	if (console) 
+	if (console)
 		DeveloperConsole();
 
 	ImGui::SameLine();
@@ -65,70 +70,59 @@ void DebugOverlay(Game& game)
 	ImGui::End();
 }
 
-std::vector<Vertex> CreatWorldCube(float spacing)
+std::vector<Vertex> CreatWorldCube(float spacing, int depth)
 {
-	int linenumber;
+	int linenumber, additionalVertLines = 4 * depth;
+	Backgroundposition = 1 + depth;
 	//aldrabice!
 	if (spacing <= 0.0625) { spacing = 0.0625; linenumber = 33; }
 	if (spacing > 0.0625 && spacing <= 0.125) { spacing = 0.125; linenumber = 17; }
 	if (spacing > 0.125 && spacing <= 0.25) { spacing = 0.25; linenumber = 9; }
 	if (spacing > 0.25 && spacing <= 0.5) { spacing = 0.5; linenumber = 5; }
-	if (spacing > 0.5 ) { spacing =1; linenumber = 3; }
+	if (spacing > 0.5) { spacing = 1; linenumber = 3; }
 	//fim da aldrabice
 
 	std::vector<Vertex> data;
 
-//Z Lines
+	for (size_t i = 0; i < linenumber; i++)
+	{
+		//Z Lines
 		//BottomSide
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(-1+spacing*i, -1, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-		//TopSide
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-		//RightSide
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, 1 ), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-		//LefttSide
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, 1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-//X Lines
-		//BottomLines
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-		//TopLines
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
+		data.push_back(Vertex(glm::vec3(-1 + spacing*i, -1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(-1 + spacing*i, -1, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
 
-//Y Lines
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(-1, -1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(-1, 1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
-	
-		for (size_t i = 0; i < linenumber; i++)
-		{
-			data.push_back(Vertex(glm::vec3(1, -1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-			data.push_back(Vertex(glm::vec3(1, 1 , -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
-		}
+		//TopSide
+		data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(-1 + spacing*i, 1, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+		//RightSide
+		data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(-1, -1 + spacing*i, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+		//LefttSide
+		data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, -1), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(1, -1 + spacing*i, 1 + depth), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+	}
+
+	for (size_t i = 0; i < linenumber + additionalVertLines; i++)
+	{
+		//X Lines
+			//BottomLines
+		data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+		//TopLines
+		data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+		//Y Lines
+
+		data.push_back(Vertex(glm::vec3(-1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(-1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+
+		data.push_back(Vertex(glm::vec3(1, -1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+		data.push_back(Vertex(glm::vec3(1, 1, -1 + spacing*i), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)));
+	}
 
 	return data;
 }
@@ -139,32 +133,40 @@ void Load(Game& game, ContentLoader& loader)
 	pool.AddSystem<MeshSystem>();
 	pool.AddSystem<TweenSystem>();
 
-
 	auto cube = loader.Load<MeshData>("cubeWorld");
-	cube->SetVertices(CreatWorldCube(0.25), PrimitiveType::Lines);
+	cube->SetVertices(CreatWorldCube(0.25, 1), PrimitiveType::Lines);
 
 	auto mesh = loader.Load<MeshData>("test");
 	mesh->SetVertices(std::vector<Vertex> {
-		Vertex(glm::vec3(1.0f, 1.0f, 1), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(1.0f, -1.0f, 1), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(-1.0f, -1.0f, 1), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(-1.0f, 1.0f, 1), glm::vec4(0.5, 0.5, 1, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(-1.0f, -1.0f, 1), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
-		Vertex(glm::vec3(1.0f, 1.0f, 1), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1))
+		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, -1.0f, Backgroundposition), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, 1.0f, Backgroundposition), glm::vec4(0.5, 0.5, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1))
 	}, PrimitiveType::Triangles);
+
+	auto ballMesh = loader.Load<MeshData>("ball");
+	ballMesh->SetVertices(std::vector<Vertex> {
+		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+	}, PrimitiveType::Triangles);
+
+	auto e = pool.CreateEntity();
+	e->Add<Mesh>(mesh);
+	e->Add<Transform>();
 
 	auto cubeEntity = pool.CreateEntity();
 	cubeEntity->Add<Mesh>(cube);
 	cubeEntity->Add<Transform>();
 
-	auto e = pool.CreateEntity();
-	e->Add<Mesh>(mesh);
-	e->Add<Transform>();
+	auto ball = pool.CreateEntity();
+	ball->Add<Mesh>(ballMesh);
+	ball->Add<BallController>();
+	ball->Add<BoxCollider>();
 }
 
 void Update(Game& game, float deltaTime)
 {
-
 }
 
 void Render(Game& game, float deltaTime)
@@ -198,7 +200,7 @@ int main() {
 
 	namedWindow("window", 1);
 
-	while (1) 
+	while (1)
 	{
 		cap >> image;
 		imshow("window", image);
