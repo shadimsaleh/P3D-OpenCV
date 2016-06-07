@@ -65,10 +65,18 @@ void DebugOverlay(Game& game)
 	ImGui::End();
 }
 
-std::vector<Vertex> CreatWorldCube(float spacing, int linenumber)
+std::vector<Vertex> CreatWorldCube(float spacing)
 {
-	
-		std::vector<Vertex> data;
+	int linenumber;
+	//aldrabice!
+	if (spacing <= 0.0625) { spacing = 0.0625; linenumber = 33; }
+	if (spacing > 0.0625 && spacing <= 0.125) { spacing = 0.125; linenumber = 17; }
+	if (spacing > 0.125 && spacing <= 0.25) { spacing = 0.25; linenumber = 9; }
+	if (spacing > 0.25 && spacing <= 0.5) { spacing = 0.5; linenumber = 5; }
+	if (spacing > 0.5 ) { spacing =1; linenumber = 3; }
+	//fim da aldrabice
+
+	std::vector<Vertex> data;
 
 //Z Lines
 		//BottomSide
@@ -139,7 +147,7 @@ void Load(Game& game, ContentLoader& loader)
 	}, PrimitiveType::Triangles);
 
 	auto cube = loader.Load<MeshData>("cubeWorld");
-	cube->SetVertices(CreatWorldCube(0.5, 5),PrimitiveType::Lines);
+	cube->SetVertices(CreatWorldCube(0.25),PrimitiveType::Lines);
 
 	auto e = pool.CreateEntity();
 	e->Add<Mesh>(mesh);
