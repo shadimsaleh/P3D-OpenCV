@@ -1,8 +1,5 @@
 #pragma once
-#include <Components\Mesh.h>
-#include <Components\Transform.h>
 #include <GL/glew.h>
-#include <opencv/cv.h>
 #include <opencv/cxcore.hpp>
 #include <opencv/highgui.h>
 #include <opencv2/videoio.hpp>
@@ -31,10 +28,7 @@ public:
 	}
 
 private:
-	//CvCapture* p_capWebCam;
 	cv::VideoCapture* p_capWebCam;
-
-	//IplImage* frame;
 
 	GLdouble Width;
 	GLdouble Height;

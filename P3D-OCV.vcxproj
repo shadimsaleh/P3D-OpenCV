@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraCapture\CamCapture.cpp" />
+    <ClCompile Include="src\CameraCapture\OpticalFlow.cpp" />
     <ClCompile Include="src\Content\MeshData.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
     <ClCompile Include="src\Debug\Console.cpp" />
