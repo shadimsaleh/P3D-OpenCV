@@ -23,13 +23,13 @@ void OpticalFlow::GetFlow()
 	}
 	else if (!points2.empty())
 	{
-		//Print("Calculating  calcOpticalFlowPyrLK", true);
+		//nice::Print("Calculating  calcOpticalFlowPyrLK", true);
 		calcOpticalFlowPyrLK(image_prev_Gray, image_next_Gray, points2, points1, status, err, winSize, 3, termcrit, 0, 0.0001);
 
 
 		for (int i = k = 0; i < points2.size(); i++)
 		{
-			//Print("X = " + std::to_string(int(points1[i].x - points2[i].x)) +
+			//nice::Print("X = " + std::to_string(int(points1[i].x - points2[i].x)) +
 			//	" Y = " + std::to_string(int(points1[i].y - points2[i].y)), false);
 			points1[k++] = points1[i];
 		}

@@ -11,7 +11,7 @@ int CamCapture::Initialize()
 {
 	p_capWebCam = new cv::VideoCapture(0);
 
-	if(!p_capWebCam){
+	if(!p_capWebCam->isOpened()){
 		return 0; //Returns 0 cannot Continue
 	}
 	return 1; //Success
@@ -20,7 +20,7 @@ int CamCapture::Initialize()
 cv::OutputArray& CamCapture::GetFrame() const
 {
 	cv::_OutputArray frame;
-	if(p_capWebCam->read(frame) == true){
+	if(p_capWebCam->read(frame)){
 		return frame;
 	}
 	return {};
