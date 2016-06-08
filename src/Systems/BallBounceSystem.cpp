@@ -126,6 +126,8 @@ void BallBounceSystem::OnRender()
 		glVertex3f(max.x, min.y, max.z);
 		
 		glEnd();
+
+		glPopMatrix();
 	}
 }
 
