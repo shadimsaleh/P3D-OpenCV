@@ -36,8 +36,8 @@ void Game::Run(int width, int height, const std::string& title)
 	glDepthMask(GL_TRUE);
 	glDepthRange(1.0f, 0.0f);
 
-	camera.SetPerspective(45.0f, float(width) / float(height), 0.1f, 1000.0f);
-	camera.position = glm::vec3(0, 0, -3);
+	camera.SetPerspective(90.0f, float(width) / float(height), 0.1f, 1000.0f);
+	camera.position = glm::vec3(0, 0, -2.0f);
 	
 	if (err != GLEW_OK)
 	{

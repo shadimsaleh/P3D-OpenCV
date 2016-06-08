@@ -50,7 +50,32 @@ void BallBounceSystem::OnExecute()
 			otherCollider->hasCollision = collision;
 			if (collision)
 			{
-				if (otherCollider->tag == "Wall")
+				if (boxCollider->tag != "Ball")
+					return;
+
+				if (otherCollider->tag == "BackWall")
+				{
+					ballController->direction.x = -ballController->direction.x;
+					ballController->direction.y = -ballController->direction.y;
+					ballController->direction.z = -ballController->direction.z;
+				}
+				else if (otherCollider->tag == "RightWall")
+				{
+					ballController->direction.x = -ballController->direction.x;
+				}
+				else if (otherCollider->tag == "LeftWall")
+				{
+					ballController->direction.x = -ballController->direction.x;
+				}
+				else if (otherCollider->tag == "TopWall")
+				{
+					ballController->direction.y = -ballController->direction.y;
+				}
+				else if (otherCollider->tag == "BottomWall")
+				{
+					ballController->direction.y = -ballController->direction.y;
+				}
+				else if (otherCollider->tag == "FrontWall")
 				{
 					ballController->direction.x = -ballController->direction.x;
 					ballController->direction.y = -ballController->direction.y;

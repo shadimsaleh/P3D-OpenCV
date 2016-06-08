@@ -204,13 +204,38 @@ void Load(Game& game, ContentLoader& loader)
 	auto ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(.5f, 1.5f, 3), glm::vec3(0), glm::vec3(.2f));
 	//ball->Add<Mesh>(ballMesh);
-	ball->Add<BallController>(glm::vec3(0, 0, 1), 1000.0f);
+	ball->Add<BallController>(glm::vec3(0.5f, 0.5f, 1), 5000.0f);
 	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
 
 	ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(0, 0, Backgroundposition), glm::vec3(0));
 	ball->Add<BallController>(glm::vec3(0), 0);
-	ball->Add<BoxCollider>("Wall", glm::vec3(-1.0f, -1.0f, -0.1f), glm::vec3(1.0f, 1.0f, 0.1f));
+	ball->Add<BoxCollider>("BackWall", glm::vec3(-1.0f, -1.0f, -.002f), glm::vec3(1.0f, 1.0f, .002f));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 0, -1.0f), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("FrontWall", glm::vec3(-1.0f, -1.0f, -.002f), glm::vec3(1.0f, 1.0f, .002f));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(1.0f, 0, 0), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("LeftWall", glm::vec3(-.002f, -1.0f, -1.0f), glm::vec3(.002f, 1.0f, Backgroundposition));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(-1.0f, 0, 0), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("RightWall", glm::vec3(-.002f, -1.0f, -1.0f), glm::vec3(.002f, 1.0f, Backgroundposition));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 1.0f, 0), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("TopWall", glm::vec3(-1.0f, -.002f, -1.0f), glm::vec3(1.0f, .002f, Backgroundposition));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, -1.0f, 0), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("BottomWall", glm::vec3(-1.0f, -.002f, -1.0f), glm::vec3(1.0f, .002f, Backgroundposition));
 }
 
 void Update(Game& game, float deltaTime)
