@@ -162,10 +162,19 @@ void Load(Game& game, ContentLoader& loader)
 	cubeEntity->Add<Transform>();
 
 	auto ball = pool.CreateEntity();
-	ball->Add<Transform>(glm::vec3(0, 0, 3), glm::vec3(0));
+	ball->Add<Transform>(glm::vec3(.5f, 1.5f, 3), glm::vec3(0));
 	ball->Add<Mesh>(ballMesh);
 	ball->Add<BallController>();
 	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
+	ball->Add<Tween>();
+
+	ball->Get<Tween>()->TweenTo(glm::vec3(.5f, .5f, 3), 5.0f);
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 0, 3.5f), glm::vec3(0));
+	ball->Add<Mesh>(ballMesh);
+	ball->Add<BallController>();
+	ball->Add<BoxCollider>("Wall", glm::vec3(0.0f), glm::vec3(1.0f));
 }
 
 void Update(Game& game, float deltaTime)

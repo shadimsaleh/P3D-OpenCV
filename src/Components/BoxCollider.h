@@ -22,16 +22,11 @@ struct BoxCollider : public IComponent
 		glm::vec3 maxA(a.max + posA);
 		glm::vec3 maxB(b.max + posB);
 
-		if (minA.x > minB.x ||
-			minA.y > minB.y ||
-			minA.z > minB.z ||
-			maxA.x < maxB.x ||
-			maxA.y < maxB.y ||
-			maxA.z < maxB.z)
-		{
-			return false;
-		}
-
-		return true;
+		return (maxA.x > minB.x &&
+			minA.x < maxB.x &&
+			maxA.y > minB.y &&
+			minA.y < maxB.y &&
+			maxA.z > minB.z &&
+			minA.z < maxB.z);
 	}
 };

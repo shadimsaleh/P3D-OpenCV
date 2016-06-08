@@ -36,11 +36,11 @@ void BallBounceSystem::OnExecute()
 
 		for (size_t j = 0; j < group.Size(); j++)
 		{
-			auto otherCollider = entity->Get<BoxCollider>();
+			auto otherCollider = group[j]->Get<BoxCollider>();
 			if (otherCollider == boxCollider)
 				continue;
 
-			auto otherTransform = entity->Get<Transform>();
+			auto otherTransform = group[j]->Get<Transform>();
 
 			bool collision = BoxCollider::IsColliding(*boxCollider, *otherCollider, transform->position, otherTransform->position);
 			boxCollider->hasCollision = collision;
@@ -74,6 +74,9 @@ void BallBounceSystem::OnRender()
 		glMatrixMode(GL_MODELVIEW);
 		glPushMatrix();
 		glLoadIdentity();
+
+		if (Camera::active)
+			Camera::active->LookAt(glm::vec3(0, 1, 0));
 
 		glTranslatef(pos.x, pos.y, pos.z);
 
