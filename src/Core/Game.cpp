@@ -32,6 +32,10 @@ void Game::Run(int width, int height, const std::string& title)
 	glewExperimental = GL_TRUE;
 	GLenum err = glewInit();
 
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glDepthRange(1.0f, 0.0f);
+
 	camera.SetPerspective(45.0f, float(width) / float(height), 0.1f, 1000.0f);
 	camera.position = glm::vec3(0, 0, -3);
 	
@@ -214,4 +218,5 @@ void Game::HelpCallback(Console * console, std::vector<std::string>& args)
 {
 	Print("'quit': closes the application.", false);
 	Print("'info': prints window and OpenGL context settings.", false);
+	Print("'camera': access camera commands such as position and rotation", false);
 }

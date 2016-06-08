@@ -15,23 +15,19 @@ struct BoxCollider : public IComponent
 
 	virtual void Reset() override { }
 
-	inline static bool IsColliding(const BoxCollider& a, const BoxCollider& b, const glm::vec3& posA, const glm::vec3& posB)
+	inline static bool IsColliding(const BoxCollider& a, const BoxCollider& b, const glm::vec3& posA, const glm::vec3& posB, 
+		const glm::vec3& scaleA = glm::vec3(1.0f), const glm::vec3& scaleB = glm::vec3(1.0f))
 	{
-		glm::vec3 minA(a.min + posA);
-		glm::vec3 minB(b.min + posB);
-		glm::vec3 maxA(a.max + posA);
-		glm::vec3 maxB(b.max + posB);
+		glm::vec3 minA((a.min + posA) * scaleA);
+		glm::vec3 minB((b.min + posB) * scaleB);
+		glm::vec3 maxA((a.max + posA) * scaleA);
+		glm::vec3 maxB((b.max + posB) * scaleB);
 
-		if (minA.x > minB.x ||
-			minA.y > minB.y ||
-			minA.z > minB.z ||
-			maxA.x < maxB.x ||
-			maxA.y < maxB.y ||
-			maxA.z < maxB.z)
-		{
-			return false;
-		}
-
-		return true;
+		return (maxA.x > minB.x &&
+			minA.x < maxB.x &&
+			maxA.y > minB.y &&
+			minA.y < maxB.y &&
+			maxA.z > minB.z &&
+			minA.z < maxB.z);
 	}
 };

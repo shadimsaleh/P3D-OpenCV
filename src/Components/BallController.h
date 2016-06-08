@@ -4,6 +4,8 @@
 
 struct BallController : public IComponent
 {
+	BallController(const glm::vec3& direction, float velocity) : direction(direction), velocity(velocity) {}
+
 	float velocity;
 	glm::vec3 direction;
 

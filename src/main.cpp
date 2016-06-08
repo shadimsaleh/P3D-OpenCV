@@ -140,17 +140,57 @@ void Load(Game& game, ContentLoader& loader)
 
 	auto mesh = loader.Load<MeshData>("test");
 	mesh->SetVertices(std::vector<Vertex> {
-		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
-			Vertex(glm::vec3(1.0f, -1.0f, Backgroundposition), glm::vec4(0, 1, 0, 1), glm::vec3(1), glm::vec2(1)),
-			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
-			Vertex(glm::vec3(-1.0f, 1.0f, Backgroundposition), glm::vec4(0.5, 0.5, 1, 1), glm::vec3(1), glm::vec2(1)),
-			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(0, 0, 1, 1), glm::vec3(1), glm::vec2(1)),
-			Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1))
+		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, -1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, 1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(-1.0f, -1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 1, 1, 1), glm::vec3(1), glm::vec2(1))
 	}, PrimitiveType::Triangles);
 
 	auto ballMesh = loader.Load<MeshData>("ball");
 	ballMesh->SetVertices(std::vector<Vertex> {
-		Vertex(glm::vec3(1.0f, 1.0f, Backgroundposition), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+		Vertex(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+
+			Vertex(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+
+			Vertex(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+
+			Vertex(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+
+			Vertex(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+
+			Vertex(glm::vec3(0.0f, 0, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(0.0f, 0, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0, 0.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
+			Vertex(glm::vec3(1.0f, 0, 1.0f), glm::vec4(1, 0, 0, 1), glm::vec3(1), glm::vec2(1)),
 	}, PrimitiveType::Triangles);
 
 	auto e = pool.CreateEntity();
@@ -162,10 +202,15 @@ void Load(Game& game, ContentLoader& loader)
 	cubeEntity->Add<Transform>();
 
 	auto ball = pool.CreateEntity();
-	ball->Add<Transform>(glm::vec3(0, 0, 3), glm::vec3(0));
-	ball->Add<Mesh>(ballMesh);
-	ball->Add<BallController>();
+	ball->Add<Transform>(glm::vec3(.5f, 1.5f, 3), glm::vec3(0), glm::vec3(.2f));
+	//ball->Add<Mesh>(ballMesh);
+	ball->Add<BallController>(glm::vec3(0, 0, 1), 1000.0f);
 	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
+
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 0, Backgroundposition), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("Wall", glm::vec3(-1.0f, -1.0f, -0.1f), glm::vec3(1.0f, 1.0f, 0.1f));
 }
 
 void Update(Game& game, float deltaTime)

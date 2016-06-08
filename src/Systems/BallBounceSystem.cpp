@@ -32,17 +32,20 @@ void BallBounceSystem::OnExecute()
 		auto boxCollider = entity->Get<BoxCollider>();
 		auto transform = entity->Get<Transform>();
 
-		transform->position += ballController->velocity * (game->GetDeltaTime() / 1000.0f);
+		transform->position += ballController->velocity * ballController->direction * (game->GetDeltaTime() / 1000.0f);
 
 		for (size_t j = 0; j < group.Size(); j++)
 		{
-			auto otherCollider = entity->Get<BoxCollider>();
+			auto otherCollider = group[j]->Get<BoxCollider>();
 			if (otherCollider == boxCollider)
 				continue;
 
-			auto otherTransform = entity->Get<Transform>();
+			auto otherTransform = group[j]->Get<Transform>();
 
-			bool collision = BoxCollider::IsColliding(*boxCollider, *otherCollider, transform->position, otherTransform->position);
+			bool collision = BoxCollider::IsColliding(*boxCollider, *otherCollider, 
+				transform->position, otherTransform->position, 
+				transform->scale, otherTransform->scale);
+			
 			boxCollider->hasCollision = collision;
 			otherCollider->hasCollision = collision;
 			if (collision)
@@ -51,6 +54,7 @@ void BallBounceSystem::OnExecute()
 				{
 					ballController->direction.x = -ballController->direction.x;
 					ballController->direction.y = -ballController->direction.y;
+					ballController->direction.z = -ballController->direction.z;
 				}
 			}
 		}
@@ -75,6 +79,10 @@ void BallBounceSystem::OnRender()
 		glPushMatrix();
 		glLoadIdentity();
 
+		if (Camera::active)
+			Camera::active->LookAt(glm::vec3(0, 1, 0));
+
+		glScalef(transform->scale.x, transform->scale.y, transform->scale.z);
 		glTranslatef(pos.x, pos.y, pos.z);
 
 		glBegin(GL_LINES);
