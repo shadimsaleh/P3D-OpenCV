@@ -2,6 +2,7 @@
 #include <Lagswitch\ECS\IComponent.h>
 #include <glm\vec3.hpp>
 #include <vector>
+#include <cmath>
 
 struct BoxCollider : public IComponent
 {
@@ -29,5 +30,14 @@ struct BoxCollider : public IComponent
 			minA.y < maxB.y &&
 			maxA.z > minB.z &&
 			minA.z < maxB.z);
+	}
+
+	inline static glm::vec3 GetLength(const BoxCollider& collider)
+	{
+		float x = collider.max.x - collider.min.x;
+		float y = collider.max.y - collider.min.y;
+		float z = collider.max.z - collider.min.z;
+
+		return glm::vec3(x, y, z);
 	}
 };

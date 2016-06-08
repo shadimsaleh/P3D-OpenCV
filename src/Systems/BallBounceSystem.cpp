@@ -5,6 +5,8 @@
 #include <Core\Game.h>
 #include <GL\glew.h>
 
+#define MAX_PADDLE_ANGLE 75.0f;
+
 BallBounceSystem::BallBounceSystem()
 	: game(Game::Instance()),
 	debug(true)
@@ -75,11 +77,25 @@ void BallBounceSystem::OnExecute()
 				{
 					ballController->direction.y = -ballController->direction.y;
 				}
-				else if (otherCollider->tag == "FrontWall")
+				else if (otherCollider->tag == "Paddle")
 				{
-					ballController->direction.x = -ballController->direction.x;
-					ballController->direction.y = -ballController->direction.y;
-					ballController->direction.z = -ballController->direction.z;
+					glm::vec3 edge;
+					glm::vec3 centerPoint = glm::vec3(0, 0, 0);
+					glm::vec3 length = BoxCollider::GetLength(*otherCollider);
+					glm::vec3 point = length * 0.5f;
+					
+					if (point.x < centerPoint.x)
+					{
+						edge = glm::vec3(otherCollider->min.x, 0, 0);
+					}
+					else 
+					{
+						edge = glm::vec3(otherCollider->max.x, 0, 0);
+					}
+
+					float angle = point.x * 75.0f / edge.x;
+
+					getchar();
 				}
 			}
 		}
