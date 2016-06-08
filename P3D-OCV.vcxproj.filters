@@ -48,7 +48,7 @@
     <ClCompile Include="src\Systems\TweenSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Systems\BallBounceSystem.cpp">
+    <ClCompile Include="src\CameraCapture\CamCapture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,13 +116,10 @@
     <ClInclude Include="src\Systems\TweenSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\BoxCollider.h">
+    <ClInclude Include="src\CameraCapture\CamCapture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\BallController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Systems\BallBounceSystem.h">
+    <ClInclude Include="src\CameraCapture\OpticalFlow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
