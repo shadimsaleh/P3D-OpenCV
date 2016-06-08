@@ -32,9 +32,10 @@ private:
 	bool needToInitialize = true;
 
 	int k = 0;
+	int interval;
 
 public:
-	OpticalFlow(CamCapture* cam);
+	OpticalFlow(CamCapture* cam, int interval);
 	void GetFlow();
 	void Release();
 };

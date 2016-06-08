@@ -1,8 +1,11 @@
 #include "OpticalFlow.h"
+#include <iostream>
 
-OpticalFlow::OpticalFlow(CamCapture* cam)
+OpticalFlow::OpticalFlow(CamCapture* cam, int interval)
 {
 	capture = cam;
+
+	this->interval = interval;
 
 	opticalFlow = cv::Mat(capture->GetFrameHeight(), capture->GetFrameWidth(), CV_32FC3);
 
@@ -13,31 +16,35 @@ OpticalFlow::OpticalFlow(CamCapture* cam)
 
 void OpticalFlow::GetFlow()
 {
-	this->frame = capture->GetFrame().getMatRef();
+	*capture->GetCapture() >> frame;
 	frame.copyTo(rgbFrames);
-	cvCvtColor(&rgbFrames, &image_next_Gray, CV_BGR2GRAY);
+	cv::cvtColor(rgbFrames, image_next_Gray, CV_BGR2GRAY);
 
 	if (needToInitialize) {
-		goodFeaturesToTrack(image_next_Gray, points1, MAX_COUNT, 0.01, 5, cv::Mat(), 3, 0, 0.04);
+		cv::goodFeaturesToTrack(image_next_Gray, points1, MAX_COUNT, 0.01, 5, 
+			cv::Mat(), 3, false, 0.04);
 		needToInitialize = false;
 	}
+
 	else if (!points2.empty())
 	{
 		//nice::Print("Calculating  calcOpticalFlowPyrLK", true);
-		calcOpticalFlowPyrLK(image_prev_Gray, image_next_Gray, points2, points1, status, err, winSize, 3, termcrit, 0, 0.0001);
-
-
-		for (int i = k = 0; i < points2.size(); i++)
-		{
-			//nice::Print("X = " + std::to_string(int(points1[i].x - points2[i].x)) +
-			//	" Y = " + std::to_string(int(points1[i].y - points2[i].y)), false);
+		cv::calcOpticalFlowPyrLK(image_prev_Gray, image_next_Gray, points2, points1,
+			status, err, winSize, 3, termcrit, 0, 0.0001);
+#if DEBUG 1
+		for (size_t i = 0; i < points2.size(); i++) {
+			std::cout << "X = " << int(points1[i].x - points2[i].x)
+				<< " Y = " << int(points1[i].y - points2[i].y) << "\n";
 			points1[k++] = points1[i];
 		}
+#endif
+
+		cv::goodFeaturesToTrack(image_next_Gray, points1, MAX_COUNT,
+			0.01, 10, cv::Mat(), 3, 0, 0.04);
 	}
 
-
 	std::swap(points2, points1);
-	points1.clear();
+	//if (!points1.empty()) points1.clear();
 	image_next_Gray.copyTo(image_prev_Gray);
 }
 

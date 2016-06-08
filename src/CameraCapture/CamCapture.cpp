@@ -17,13 +17,11 @@ int CamCapture::Initialize()
 	return 1; //Success
 }
 
-cv::OutputArray& CamCapture::GetFrame() const
+cv::Mat CamCapture::GetFrame() const
 {
-	cv::_OutputArray frame;
-	if(p_capWebCam->read(frame)){
-		return frame;
-	}
-	return {};
+	cv::Mat frame;
+	p_capWebCam->read(frame);
+	return frame;
 }
 
 void CamCapture::EndCapture() const

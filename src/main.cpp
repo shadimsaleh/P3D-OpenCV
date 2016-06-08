@@ -134,12 +134,7 @@ std::vector<Vertex> CreatWorldCube(float spacing, int depth)
 }
 
 void Load(Game& game, ContentLoader& loader)
-{
-	capture = new CamCapture();
-	if (capture->Initialize() == 0) capture = nullptr;
-	else opticalFlow = new OpticalFlow(capture);
-	
-
+{	
 	Pool& pool = game.GetPool();
 	pool.AddSystem<MeshSystem>();
 	pool.AddSystem<TweenSystem>();
@@ -246,6 +241,10 @@ void Load(Game& game, ContentLoader& loader)
 	ball->Add<Transform>(glm::vec3(0, -1.0f, 0), glm::vec3(0));
 	ball->Add<BallController>(glm::vec3(0), 0);
 	ball->Add<BoxCollider>("BottomWall", glm::vec3(-1.1f, -.002f, -1.0f), glm::vec3(1.1f, .002f, Backgroundposition));
+
+	capture = new CamCapture();
+	if (capture->Initialize() == 0) capture = nullptr;
+	else opticalFlow = new OpticalFlow(capture, 10);
 }
 
 void Update(Game& game, float deltaTime)
