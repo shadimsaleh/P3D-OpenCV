@@ -1,18 +1,15 @@
 #include "CamCapture.h"
 
-CamCapture::CamCapture(int w, int h) : p_capWebCam(nullptr) {
-	this->Width = w;
-	this->Height = h;
-}
+CamCapture::CamCapture()
+	: p_capWebCam(nullptr), Width(0), Height(0)
+{ }
 
 CamCapture::~CamCapture()
 { }
 
 int CamCapture::Initialize()
 {
-	p_capWebCam = cvCaptureFromCAM(0);
-	cvSetCaptureProperty(this->p_capWebCam, CV_CAP_PROP_FRAME_WIDTH, 320);
-	cvSetCaptureProperty(this->p_capWebCam, CV_CAP_PROP_FRAME_HEIGHT, 280);
+	p_capWebCam = new cv::VideoCapture(0);
 
 	if(!p_capWebCam){
 		return 0; //Returns 0 cannot Continue
@@ -20,14 +17,17 @@ int CamCapture::Initialize()
 	return 1; //Success
 }
 
-IplImage* CamCapture::GetFrame()
+cv::OutputArray& CamCapture::GetFrame() const
 {
-	this->frame = cvQueryFrame(this->p_capWebCam);
-	return this->frame;
+	cv::_OutputArray frame;
+	if(p_capWebCam->read(frame) == true){
+		return frame;
+	}
+	return {};
 }
 
-void CamCapture::EndCapture()
+void CamCapture::EndCapture() const
 {
-	cvReleaseCapture(&p_capWebCam);
+	p_capWebCam->release();
 }
 

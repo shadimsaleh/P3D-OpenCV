@@ -10,6 +10,12 @@
 #include "CamCapture.h"
 #include <opencv/cvwimage.h>
 
+#include <iostream>
+#include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+
 class CamCapture;
 
 #define  DEBUG 0
@@ -18,11 +24,28 @@ class OpticalFlow
 {
 private:
 	CamCapture *capture = nullptr;
-	IplImage *frame = nullptr; // frame
-	IplImage *grayA = nullptr; // gray
-	IplImage *grayB = nullptr; // prevgray
-	IplImage *velx = nullptr;
-	IplImage *vely = nullptr;
+	cv::Mat frame;
+	cv::Mat image_prev_Gray;
+	cv::Mat image_next_Gray;
+	cv::Mat rgbFrames;
+	cv::Mat opticalFlow;
+
+	std::vector<cv::Point2f> points1;
+	std::vector<cv::Point2f> points2;
+
+	cv::Point2f diff;
+	CvPoint2D32f* corners;
+
+	int * MAX_COUNT;
+
+	char* status;
+	float* err;
+
+	cv::TermCriteria termcrit;
+	cv::Size subPixWinSize;
+	cv::Size winSize;
+
+	bool needToInitialize = true;
 
 public:
 	OpticalFlow(CamCapture* cam);
@@ -32,53 +55,41 @@ public:
 
 inline OpticalFlow::OpticalFlow(CamCapture* cam)
 {
+	corners = new CvPoint2D32f(4, 4);
+	MAX_COUNT = new int(500);
 	capture = cam;
+
+	opticalFlow = cv::Mat(capture->GetFrameHeight(), capture->GetFrameWidth(), CV_32FC3);
+
+	termcrit = CvTermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03);
+	subPixWinSize = CvSize(10, 10);
+	winSize = CvSize(31, 31);
 }
 
 inline glm::vec3 OpticalFlow::GetFlow()
 {
-	this->frame = capture->GetFrame();
+	this->frame = capture->GetFrame().getMatRef();
+	frame.copyTo(rgbFrames);
+	cvCvtColor(&rgbFrames, &image_next_Gray, CV_BGR2GRAY);
 
-	if (!frame) return glm::vec3(0,0,0);
-
-	if (!grayA) grayA = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
-	if (!grayB) grayB = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
-	if (!velx) velx = cvCreateImage(cvGetSize(frame), IPL_DEPTH_32F, 1);
-	if (!vely) vely = cvCreateImage(cvGetSize(frame), IPL_DEPTH_32F, 1);
-	cvCvtColor(frame, grayA, CV_BGR2GRAY);
-
-	CvTermCriteria IterCriteria;
-	IterCriteria.type = CV_TERMCRIT_ITER;
-	IterCriteria.max_iter = 5;
-
-	//this
-	//cvCalcOpticalFlowHS(grayB, grayA, 1, velx, vely, 0.1, IterCriteria);
-
-	for (int i = 0; i<frame->height; i += 5)
-	{
-		for (int j = 0; j<frame->width; j += 5)
-		{
-			int dx = (int)cvGetReal2D(velx, i, j);
-			int dy = (int)cvGetReal2D(vely, i, j);
-#if DEBUG 1
-			cvLine(frame, cvPoint(j, i), cvPoint(j + dx, i + dy), CV_RGB(255, 255, 255), 1, 8, 0);
-#endif
-
-		}
+	if(needToInitialize) {
+		cvGoodFeaturesToTrack(&image_next_Gray, &points1, &image_next_Gray, corners, MAX_COUNT , 0.1, 5, &cv::Mat(), 3, 0, 0.04);
+		needToInitialize = false;
 	}
+	else if(!points2.empty())
+	{
+		Print("Calculating  calcOpticalFlowPyrLK", true);
+		cvCalcOpticalFlowPyrLK(&image_prev_Gray, &image_next_Gray, &points2, &points1, 
+			3,winSize, 0.0001, status, err, termcrit, 0);
 
-
-
-	cvCopy(grayA, grayB);
-
-	return {};
+	}
 }
 
 inline void OpticalFlow::Release()
 {
-	if (!frame) cvReleaseImage(&frame);
-	if (!grayA) cvReleaseImage(&grayA);
-	if (!grayB) cvReleaseImage(&grayB);
-	if (!velx) cvReleaseImage(&velx);
-	if (!vely) cvReleaseImage(&vely);
+	frame.release();
+	image_prev_Gray.release();
+	image_next_Gray.release();
+	rgbFrames.release();
+	opticalFlow.release();
 }
