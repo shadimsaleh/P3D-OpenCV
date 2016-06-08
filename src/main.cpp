@@ -12,9 +12,14 @@
 #include <imgui-sfml\imgui-SFML.h>
 #include <Data\LimitedQueue.h>
 #include <Debug\Console.h>
+#include "CameraCapture/CamCapture.h"
+#include "CameraCapture/OpticalFlow.h"
 
 
 int Backgroundposition;
+
+CamCapture* capture;
+OpticalFlow* opticalFlow;
 
 void DeveloperSettings()
 {
@@ -235,11 +240,21 @@ void Load(Game& game, ContentLoader& loader)
 	ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(0, -1.0f, 0), glm::vec3(0));
 	ball->Add<BallController>(glm::vec3(0), 0);
+<<<<<<< HEAD
 	ball->Add<BoxCollider>("BottomWall", glm::vec3(-1.1f, -.002f, -1.0f), glm::vec3(1.1f, .002f, Backgroundposition));
+=======
+	ball->Add<BoxCollider>("BottomWall", glm::vec3(-1.0f, -.002f, -1.0f), glm::vec3(1.0f, .002f, Backgroundposition));
+
+	capture = new CamCapture();
+	capture->Initialize();
+
+	opticalFlow = new OpticalFlow(capture);
+>>>>>>> ad3f35c73a672f3d9aef378a531a929152ef5ae5
 }
 
 void Update(Game& game, float deltaTime)
 {
+	opticalFlow->GetFlow();
 }
 
 void Render(Game& game, float deltaTime)
