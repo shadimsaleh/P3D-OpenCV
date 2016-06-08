@@ -5,8 +5,7 @@
 #include <opencv/cv.h>
 #include <opencv/cxcore.hpp>
 #include <opencv/highgui.h>
-#include <Debug/Console.h>
-#include <Debug/Debug.h>
+
 
 #define MAXFACES 10
 
@@ -22,7 +21,7 @@ public:
 	void EndCapture(void);
 
 private:
-	CvCapture* p_capWebCam = nullptr;
+	CvCapture* p_capWebCam;
 	
 	IplImage* frame;
 

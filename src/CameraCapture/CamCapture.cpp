@@ -1,6 +1,6 @@
 #include "CamCapture.h"
 
-CamCapture::CamCapture(int w, int h) {
+CamCapture::CamCapture(int w, int h) : p_capWebCam(nullptr) {
 	this->Width = w;
 	this->Height = h;
 }
@@ -15,8 +15,6 @@ int CamCapture::Initialize()
 	cvSetCaptureProperty(this->p_capWebCam, CV_CAP_PROP_FRAME_HEIGHT, 280);
 
 	if(!p_capWebCam){
-		//Error
-		Print("Cannot Initialize WebCam!", true);
 		return 0; //Returns 0 cannot Continue
 	}
 	return 1; //Success

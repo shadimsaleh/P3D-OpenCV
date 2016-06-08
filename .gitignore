@@ -235,6 +235,8 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
+imgui.ini
+
 # Exclusions
 !lib/**
 !deps/**

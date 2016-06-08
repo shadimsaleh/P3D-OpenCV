@@ -7,6 +7,7 @@
 #include <Components\BallController.h>
 #include <Systems\MeshSystem.h>
 #include <Systems\TweenSystem.h>
+#include <Systems\BallBounceSystem.h>
 #include <imgui\imgui.h>
 #include <imgui-sfml\imgui-SFML.h>
 #include <Data\LimitedQueue.h>
@@ -132,6 +133,7 @@ void Load(Game& game, ContentLoader& loader)
 	Pool& pool = game.GetPool();
 	pool.AddSystem<MeshSystem>();
 	pool.AddSystem<TweenSystem>();
+	pool.AddSystem<BallBounceSystem>();
 
 	auto cube = loader.Load<MeshData>("cubeWorld");
 	cube->SetVertices(CreatWorldCube(0.25, 1), PrimitiveType::Lines);
@@ -160,9 +162,10 @@ void Load(Game& game, ContentLoader& loader)
 	cubeEntity->Add<Transform>();
 
 	auto ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 0, 3), glm::vec3(0));
 	ball->Add<Mesh>(ballMesh);
 	ball->Add<BallController>();
-	ball->Add<BoxCollider>();
+	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
 }
 
 void Update(Game& game, float deltaTime)

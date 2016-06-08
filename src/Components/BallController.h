@@ -4,7 +4,8 @@
 
 struct BallController : public IComponent
 {
-	glm::vec3 velocity;
+	float velocity;
+	glm::vec3 direction;
 
 	virtual void Reset() override { }
 };
