@@ -1,5 +1,6 @@
 #pragma once
 #include <Lagswitch\ECS\ISystem.h>
+#include <Lagswitch\ECS\Group.h>
 
 class BallBounceSystem : public ISystem
 {
@@ -12,4 +13,7 @@ private:
 	virtual void OnExecute() override;
 	virtual void OnRender() override;
 	virtual void OnDispose() override;
+
+	Group group;
+	Game* game;
 };
