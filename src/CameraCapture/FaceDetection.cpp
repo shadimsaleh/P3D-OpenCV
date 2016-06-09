@@ -4,7 +4,9 @@
 #include "opencv2/videoio/videoio.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
-FaceDetection::FaceDetection(char* fileName, CamCapture* capture): m_storage(nullptr) {
+FaceDetection::FaceDetection(char* fileName, CamCapture* capture)
+	: m_storage(nullptr), m_frame(nullptr)
+{
 	this->m_fileName = fileName;
 	this->m_capture = capture;
 }
@@ -23,7 +25,7 @@ void FaceDetection::Initialize()
 
 void FaceDetection::Detect()
 {
-	this->m_frame = &m_capture->GetFrame_IplImage();	
+	this->m_frame = m_capture->GetFrame_IplImage();	
 	if (!m_frame) return;	
 	assert(m_cascade_f[0] && m_storage);
 
@@ -58,8 +60,8 @@ void FaceDetection::DetectFaces()
 			cvResize(m_frame, imgfaces[i], CV_INTER_LINEAR);
 			cvResetImageROI(m_frame);
 		}
-		cvRectangle(m_frame, cv::Point(debug_Rect->x, debug_Rect->y),
-			cv::Point(debug_Rect->x + debug_Rect->width, debug_Rect->y + debug_Rect->height), CV_RGB(255, 0, 0), 1, 8, 0);
+		cvRectangle(m_frame, Point(debug_Rect->x, debug_Rect->y),
+			Point(debug_Rect->x + debug_Rect->width, debug_Rect->y + debug_Rect->height), CV_RGB(255, 0, 0), 1, 8, 0);
 	}
 
 	cvClearMemStorage(this->m_storage);

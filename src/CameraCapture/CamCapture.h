@@ -15,7 +15,7 @@ public:
 
 	int Initialize();
 	cv::Mat GetFrame_Mat() const;
-	IplImage GetFrame_IplImage();
+	IplImage* GetFrame_IplImage() const;
 	cv::VideoCapture* GetCapture() const { return this->p_capWebCam; }
 	void EndCapture(void) const;
 

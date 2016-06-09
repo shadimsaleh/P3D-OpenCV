@@ -26,14 +26,15 @@ cv::Mat CamCapture::GetFrame_Mat() const
 	return {};
 }
 
-IplImage CamCapture::GetFrame_IplImage()
+IplImage* CamCapture::GetFrame_IplImage() const
 {
 	cv::Mat frame;
-	IplImage image;
+	IplImage* image;
 	if(p_capWebCam->read(frame)){
 		image = cvCreateImage(cvSize(frame.cols, frame.rows), 8, 1);
 		return image;
 	}
+	return {};
 }
 
 void CamCapture::EndCapture() const

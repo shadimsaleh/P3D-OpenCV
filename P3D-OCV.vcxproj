@@ -167,6 +167,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\CameraCapture\CamCapture.cpp" />
+    <ClCompile Include="src\CameraCapture\FaceDetection.cpp" />
     <ClCompile Include="src\CameraCapture\OpticalFlow.cpp" />
     <ClCompile Include="src\Content\MeshData.cpp" />
     <ClCompile Include="src\Core\Game.cpp" />
@@ -183,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\CameraCapture\CamCapture.h" />
+    <ClInclude Include="src\CameraCapture\FaceDetection.h" />
     <ClInclude Include="src\CameraCapture\OpticalFlow.h" />
     <ClInclude Include="src\Components\BallController.h" />
     <ClInclude Include="src\Components\BoxCollider.h" />
