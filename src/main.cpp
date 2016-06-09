@@ -21,6 +21,7 @@ int Backgroundposition;
 
 CamCapture* capture;
 OpticalFlow* opticalFlow;
+FaceDetection* det;
 
 void DeveloperSettings()
 {
@@ -245,15 +246,22 @@ void Load(Game& game, ContentLoader& loader)
 
 	capture = new CamCapture();
 	if (capture->Initialize() == 0) capture = nullptr;
-	
-	FaceDetection* det = new FaceDetection("hello.xml", capture);
+	//Comentar este else
+	else 
+	{
+		det = new FaceDetection("haarcascade_frontalface_alt.xml", capture);
+		det->Initialize();
+	}
 
+	//Descomentar isto
 	//else opticalFlow = new OpticalFlow(capture, 10);
 }
 
 void Update(Game& game, float deltaTime)
 {
-	if(opticalFlow != nullptr) opticalFlow->GetFlow();
+	//Descomentar* isto
+	//if (opticalFlow != nullptr) opticalFlow->GetFlow();
+	if(det != nullptr) det->Detect();
 }
 
 void Render(Game& game, float deltaTime)
