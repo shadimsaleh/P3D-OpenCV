@@ -13,9 +13,9 @@ OpticalFlow::OpticalFlow(CamCapture* cam, int interval)
 
 	opticalFlow = cv::Mat(capture->GetFrameHeight(), capture->GetFrameWidth(), CV_32FC3);
 
-	termcrit = CvTermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03);
-	subPixWinSize = CvSize(2, 2);
-	winSize = CvSize(1, 1);
+	termcrit = cv::TermCriteria(CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.03);
+	subPixWinSize = cv::Size(10, 10);
+	winSize = cv::Size(31, 3);
 }
 
 void OpticalFlow::GetFlow()
@@ -41,7 +41,6 @@ void OpticalFlow::GetFlow()
 		cv::calcOpticalFlowPyrLK(image_prev_Gray, image_next_Gray, points2, points1,
 			status, err, winSize, 3, termcrit, 0, 0.001);
 
-#if DEBUG 1
 		size_t i, k = 0;
 		for (i = 0; i < points1.size(); i++) {
 			std::cout << "X = " << int(points1[i].x - points2[i].x)
@@ -53,7 +52,6 @@ void OpticalFlow::GetFlow()
 
 		cv::imshow("LK Demo", image_next_Gray);
 		cv::imshow("Grey", rgbFrames);
-#endif
 
 		cv::goodFeaturesToTrack(image_next_Gray, points1, MAX_COUNT,
 			0.01, 10, cv::Mat(), 3, 0, 0.04);

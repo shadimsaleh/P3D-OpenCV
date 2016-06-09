@@ -27,7 +27,7 @@ void FaceDetection::Detect()
 {
 	this->m_frame = m_capture->GetFrame_IplImage();	
 	if (!m_frame) return;	
-	assert(m_cascade_f[0] && m_storage);
+	//assert(m_cascade_f[0] && m_storage);
 
 	DetectFaces();
 }
