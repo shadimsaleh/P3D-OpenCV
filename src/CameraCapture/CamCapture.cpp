@@ -20,8 +20,10 @@ int CamCapture::Initialize()
 cv::Mat CamCapture::GetFrame() const
 {
 	cv::Mat frame;
-	p_capWebCam->read(frame);
-	return frame;
+	if(p_capWebCam->retrieve(frame, CV_LOAD_IMAGE_COLOR)) {
+		return frame;
+	}
+	return {};
 }
 
 void CamCapture::EndCapture() const

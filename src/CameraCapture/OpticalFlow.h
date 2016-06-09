@@ -2,9 +2,7 @@
 #include <opencv/cv.h>
 #include "CamCapture.h"
 
-#include <opencv2/video/tracking.hpp>
-
-#define DEBUG 0
+#define DEBUG 1
 #define MAX_COUNT 500
 
 class OpticalFlow
