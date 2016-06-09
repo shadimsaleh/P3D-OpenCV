@@ -14,6 +14,7 @@
 #include <Debug\Console.h>
 #include "CameraCapture/CamCapture.h"
 #include "CameraCapture/OpticalFlow.h"
+#include "CameraCapture/FaceDetection.h"
 
 
 int Backgroundposition;
@@ -244,7 +245,10 @@ void Load(Game& game, ContentLoader& loader)
 
 	capture = new CamCapture();
 	if (capture->Initialize() == 0) capture = nullptr;
-	else opticalFlow = new OpticalFlow(capture, 10);
+	
+	FaceDetection* det = new FaceDetection("hello.xml", capture);
+
+	//else opticalFlow = new OpticalFlow(capture, 10);
 }
 
 void Update(Game& game, float deltaTime)

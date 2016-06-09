@@ -20,7 +20,7 @@ OpticalFlow::OpticalFlow(CamCapture* cam, int interval)
 
 void OpticalFlow::GetFlow()
 {
-	this->frame = capture->GetFrame();
+	this->frame = capture->GetFrame_Mat();
 	frame.copyTo(rgbFrames);
 	cv::cvtColor(rgbFrames, image_next_Gray, CV_BGR2GRAY);
 

@@ -17,13 +17,23 @@ int CamCapture::Initialize()
 	return 1; //Success
 }
 
-cv::Mat CamCapture::GetFrame() const
+cv::Mat CamCapture::GetFrame_Mat() const
 {
 	cv::Mat frame;
 	if(p_capWebCam->retrieve(frame, CV_LOAD_IMAGE_COLOR)) {
 		return frame;
 	}
 	return {};
+}
+
+IplImage CamCapture::GetFrame_IplImage()
+{
+	cv::Mat frame;
+	IplImage image;
+	if(p_capWebCam->read(frame)){
+		image = cvCreateImage(cvSize(frame.cols, frame.rows), 8, 1);
+		return image;
+	}
 }
 
 void CamCapture::EndCapture() const
