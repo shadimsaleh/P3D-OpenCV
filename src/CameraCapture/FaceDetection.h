@@ -1,12 +1,19 @@
 #pragma once
 #include "CamCapture.h"
-#include <opencv/cv.h>
-#include <opencv/cxcore.h>
-#include <opencv/highgui.h>
+#include<stdio.h>
+#include<math.h>
+#include<opencv\cv.h>
+#include<opencv\highgui.h>
+#include<opencv2\objdetect\objdetect.hpp>
+#include<opencv2\highgui\highgui.hpp>
+#include<opencv2\imgproc\imgproc.hpp>
+#include<vector>
 
 using namespace cv;
+using namespace std;
 
 #define MAXFACES 1
+
 
 class FaceDetection
 {
@@ -14,22 +21,20 @@ public:
 	FaceDetection(char* fileName, CamCapture* capture);
 	~FaceDetection();
 
-	void Initialize();
+	int Initialize();
 	void Detect();
 
 private:
 
 	void DetectFaces();
 
-	void SetupMemory();
-	CvMemStorage* m_storage;
-
-	CvHaarClassifierCascade* m_cascade_f[1];
+	static void read_csv(const string& filename, vector<Mat>& images, vector<int>& labels, char separator = ';');
 
 	/* XML File Name to detect Faces */
 	char* m_fileName;
 	CamCapture* m_capture;
 	
-	IplImage* m_frame;
-	IplImage *imgfaces[MAXFACES];
+	Mat cap_img, gray_img;
+	vector<Rect> faces, eyes;
+	CascadeClassifier face_cascade, eye_cascade;
 };

@@ -1,11 +1,5 @@
 #include "FaceDetection.h"
-#include "opencv2/video/tracking.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include "opencv2/videoio/videoio.hpp"
-#include "opencv2/highgui/highgui.hpp"
-
 FaceDetection::FaceDetection(char* fileName, CamCapture* capture)
-	: m_storage(nullptr), m_frame(nullptr)
 {
 	this->m_fileName = fileName;
 	this->m_capture = capture;
@@ -16,60 +10,46 @@ FaceDetection::~FaceDetection()
 
 }
 
-void FaceDetection::Initialize()
+int FaceDetection::Initialize()
 {
-	this->m_cascade_f[0] = static_cast<CvHaarClassifierCascade*>(
-		cvLoad(this->m_fileName, nullptr, nullptr, nullptr));
-	SetupMemory();
+	if (!face_cascade.load("c:\\haar\\haarcascade_frontalface_alt2.xml")) {
+		printf("Error loading cascade file for face");
+		return 0;
+	}
+	if (!eye_cascade.load("c:\\haar\\haarcascade_eye.xml")) {
+		printf("Error loading cascade file for eye");
+		return 0;
+	}
+	return 1;
 }
 
 void FaceDetection::Detect()
 {
-	this->m_frame = m_capture->GetFrame_IplImage();	
-	if (!m_frame) return;	
-	//assert(m_cascade_f[0] && m_storage);
+	cap_img = m_capture->GetFrame_Mat();
+	cvtColor(cap_img, gray_img, CV_BGR2GRAY);
+	cv::equalizeHist(gray_img, gray_img);
 
 	DetectFaces();
 }
 
 void FaceDetection::DetectFaces()
 {
-	Rect *debug_Rect;
-	GLuint i;
-
-	IplImage* grayImage = cvCreateImage(cvSize(this->m_frame->width, this->m_frame->height), 8, 1);
-
-	cvCvtColor(m_frame, grayImage, CV_BGR2GRAY);
-	cvEqualizeHist(grayImage, grayImage);
-
-	CvSeq* faces = cvHaarDetectObjects(grayImage, m_cascade_f[0], m_storage, 1.1, 2, 0, cvSize(30, 30));
-
-	for (i = 0; i<MAXFACES; i++){
-		if (imgfaces[i]) cvReleaseImage(&imgfaces[i]);
-	}
-
-	if (faces->total == 0) return;
-
-	for (i = 0; i < (faces ? faces->total : 0); i++){
-		debug_Rect = reinterpret_cast<Rect*>(cvGetSeqElem(faces, i));
-
-		if(i<MAXFACES){
-			cvSetImageROI(m_frame, cvRect(debug_Rect->x, debug_Rect->y, 
-				debug_Rect->width, debug_Rect->height));
-			imgfaces[i] = cvCreateImage(cvSize(128, 128), m_frame->depth, m_frame->nChannels);
-			cvResize(m_frame, imgfaces[i], CV_INTER_LINEAR);
-			cvResetImageROI(m_frame);
+	face_cascade.detectMultiScale(gray_img, faces, 1.1, 10, 
+		CV_HAAR_SCALE_IMAGE | CV_HAAR_DO_CANNY_PRUNING, cvSize(0, 0), cvSize(300, 300));
+	for (int i = 0; i < faces.size(); i++)
+	{
+		Point pt1(faces[i].x + faces[i].width, faces[i].y + faces[i].height);
+		Point pt2(faces[i].x, faces[i].y);
+		Mat faceROI = gray_img(faces[i]);
+		eye_cascade.detectMultiScale(faceROI, eyes, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(30, 30));
+		for (size_t j = 0; j< eyes.size(); j++)
+		{
+			//Point center(faces[i].x+eyes[j].x+eyes[j].width*0.5, faces[i].y+eyes[j].y+eyes[j].height*0.5);
+			Point center(faces[i].x + eyes[j].x + eyes[j].width*0.5, faces[i].y + eyes[j].y + eyes[j].height*0.5);
+			int radius = cvRound((eyes[j].width + eyes[j].height)*0.25);
+			circle(cap_img, center, radius, Scalar(255, 0, 0), 2, 8, 0);
 		}
-		cvRectangle(m_frame, Point(debug_Rect->x, debug_Rect->y),
-			Point(debug_Rect->x + debug_Rect->width, debug_Rect->y + debug_Rect->height), CV_RGB(255, 0, 0), 1, 8, 0);
+		rectangle(cap_img, pt1, pt2, cvScalar(0, 255, 0), 2, 8, 0);
 	}
-
-	cvClearMemStorage(this->m_storage);
-
-	cvReleaseImage(&grayImage);
-}
-
-void FaceDetection::SetupMemory()
-{
-	m_storage = cvCreateMemStorage(0);
+	imshow("Result", cap_img);
 }
