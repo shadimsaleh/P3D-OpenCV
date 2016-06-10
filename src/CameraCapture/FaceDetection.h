@@ -12,7 +12,7 @@
 using namespace cv;
 using namespace std;
 
-#define MAXFACES 1
+#define MAXFACES 4
 
 
 class FaceDetection

@@ -260,8 +260,8 @@ void Load(Game& game, ContentLoader& loader)
 void Update(Game& game, float deltaTime)
 {
 	//Descomentar* isto
-	if (opticalFlow != nullptr) opticalFlow->GetFlow();
-	//if(det != nullptr) det->Detect();
+	//if (opticalFlow != nullptr) opticalFlow->GetFlow();
+	if(det != nullptr) det->Detect();
 }
 
 void Render(Game& game, float deltaTime)

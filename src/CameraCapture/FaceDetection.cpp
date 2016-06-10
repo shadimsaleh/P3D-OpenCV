@@ -12,7 +12,7 @@ FaceDetection::~FaceDetection()
 
 int FaceDetection::Initialize()
 {
-	if (!face_cascade.load("C:/Users/DecaPod/Documents/GitHub/P3D-OpenCV/src/CameraCapture/" + m_fileName)) {
+	if (!face_cascade.load("./src/CameraCapture/haarcascade_frontalface_alt.xml")) {
 		printf("Error loading cascade file for face");
 		return 0;
 	}
@@ -30,21 +30,15 @@ void FaceDetection::Detect()
 
 void FaceDetection::DetectFaces()
 {
-	face_cascade.detectMultiScale(gray_img, faces, 1.1, 10, 
+	face_cascade.detectMultiScale(gray_img, faces, 1.1, 1, 
 		CV_HAAR_SCALE_IMAGE | CV_HAAR_DO_CANNY_PRUNING, cvSize(0, 0), cvSize(300, 300));
-	for (int i = 0; i < faces.size(); i++)
+	for (int i = 0; i < MAXFACES; i++)
 	{
+		if (faces[i].x + faces[i].width > this->m_capture->GetFrameWidth() ||
+			faces[i].y + faces[i].height > this->m_capture->GetFrameHeight() || 
+			faces[i].area() < 100) continue;
 		Point pt1(faces[i].x + faces[i].width, faces[i].y + faces[i].height);
 		Point pt2(faces[i].x, faces[i].y);
-		Mat faceROI = gray_img(faces[i]);
-		eye_cascade.detectMultiScale(faceROI, eyes, 1.1, 2, 0 | CV_HAAR_SCALE_IMAGE, Size(30, 30));
-		for (size_t j = 0; j< eyes.size(); j++)
-		{
-			//Point center(faces[i].x+eyes[j].x+eyes[j].width*0.5, faces[i].y+eyes[j].y+eyes[j].height*0.5);
-			Point center(faces[i].x + eyes[j].x + eyes[j].width*0.5, faces[i].y + eyes[j].y + eyes[j].height*0.5);
-			int radius = cvRound((eyes[j].width + eyes[j].height)*0.25);
-			circle(cap_img, center, radius, Scalar(255, 0, 0), 2, 8, 0);
-		}
 		rectangle(cap_img, pt1, pt2, cvScalar(0, 255, 0), 2, 8, 0);
 	}
 	imshow("Result", cap_img);
