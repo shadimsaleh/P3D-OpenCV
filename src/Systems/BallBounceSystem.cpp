@@ -95,7 +95,7 @@ void BallBounceSystem::OnExecute()
 
 					float angle = point.x * 75.0f / edge.x;
 
-					getchar();
+					//getchar();
 				}
 			}
 		}
