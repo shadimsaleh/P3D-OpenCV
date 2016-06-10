@@ -19,6 +19,7 @@
 
 int Backgroundposition;
 
+std::shared_ptr<Entity> paddle;
 Point pt;
 CamCapture* capture;
 OpticalFlow* opticalFlow;
@@ -220,10 +221,10 @@ void Load(Game& game, ContentLoader& loader)
 	ball->Add<BallController>(glm::vec3(0), 0);
 	ball->Add<BoxCollider>("BackWall", glm::vec3(-1.0f, -1.0f, -.002f), glm::vec3(1.0f, 1.0f, .002f));
 
-	ball = pool.CreateEntity();
-	ball->Add<Transform>(glm::vec3(0, 0, -1.0f), glm::vec3(0));
-	ball->Add<BallController>(glm::vec3(0), 0);
-	ball->Add<BoxCollider>("Paddle", glm::vec3(-1.0f, -1.0f, -.002f), glm::vec3(1.0f, 1.0f, .002f));
+	paddle = pool.CreateEntity();
+	paddle->Add<Transform>(glm::vec3(0, 0, -1.0f), glm::vec3(0));
+	paddle->Add<BallController>(glm::vec3(0), 0);
+	paddle->Add<BoxCollider>("Paddle", glm::vec3(-0.35f, -0.25f, -.002f), glm::vec3(0.35f, 0.25f, .002f));
 
 	ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(1.0f, 0, 0), glm::vec3(0));
@@ -265,7 +266,10 @@ void Update(Game& game, float deltaTime)
 	if(det != nullptr) det->Detect();
 
 	pt = det->returnFacePoint();
-	
+	printf("%i  ;  %i ", pt.x, pt.y);
+
+	paddle->Get<Transform>()->position.y = ((1 * pt.y / capture->GetFrameHeight())- 0.5f)*-1;
+	paddle->Get<Transform>()->position.x = ((1 * pt.x / capture->GetFrameWidth())- 0.5f);
 }
 
 void Render(Game& game, float deltaTime)
