@@ -44,6 +44,7 @@ void DebugOverlay(Game& game)
 
 	ImGui::Text("Developer Debug Data");
 	ImGui::Separator();
+	ImGui::Text("Score: %i", BallBounceSystem::score);
 	ImGui::Text("Mouse Position (Screen): (%.1f,%.1f)", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
 	ImGui::Text("Frames Per Second: %i", game.GetFramesPerSecond());
 
@@ -212,7 +213,7 @@ void Load(Game& game, ContentLoader& loader)
 
 	auto ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(.5f, 1.5f, 3), glm::vec3(0), glm::vec3(.2f));
-	//ball->Add<Mesh>(ballMesh);
+	ball->Add<Mesh>(ballMesh);
 	ball->Add<BallController>(glm::vec3(0.5f, 0.5f, 1), 5000.0f);
 	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
 
@@ -246,6 +247,11 @@ void Load(Game& game, ContentLoader& loader)
 	ball->Add<BallController>(glm::vec3(0), 0);
 	ball->Add<BoxCollider>("BottomWall", glm::vec3(-1.1f, -.002f, -1.0f), glm::vec3(1.1f, .002f, Backgroundposition));
 
+	ball = pool.CreateEntity();
+	ball->Add<Transform>(glm::vec3(0, 0, -1.5f), glm::vec3(0));
+	ball->Add<BallController>(glm::vec3(0), 0);
+	ball->Add<BoxCollider>("FrontWall", glm::vec3(-2.0f, -2.0f, -.006f), glm::vec3(2.0f, 2.0f, -.002f));
+
 	capture = new CamCapture();
 	if (capture->Initialize() == 0) capture = nullptr;
 	//Comentar este else
@@ -263,13 +269,17 @@ void Update(Game& game, float deltaTime)
 {
 	//Descomentar* isto
 	//if (opticalFlow != nullptr) opticalFlow->GetFlow();
-	if(det != nullptr) det->Detect();
+	if (det != nullptr)
 
-	pt = det->returnFacePoint();
-	printf("%i  ;  %i ", pt.x, pt.y);
+	{
+		det->Detect();
 
-	paddle->Get<Transform>()->position.y = ((1 * pt.y / capture->GetFrameHeight())- 0.5f)*-1;
-	paddle->Get<Transform>()->position.x = ((1 * pt.x / capture->GetFrameWidth())- 0.5f);
+		pt = det->returnFacePoint();
+
+		paddle->Get<Transform>()->position.y = ((1 * pt.y / capture->GetFrameHeight()) - 0.5f)*-1;
+		paddle->Get<Transform>()->position.x = ((1 * pt.x / capture->GetFrameWidth()) - 0.5f);
+	}
+
 }
 
 void Render(Game& game, float deltaTime)

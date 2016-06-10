@@ -10,6 +10,8 @@ public:
 	BallBounceSystem();
 	~BallBounceSystem();
 
+	static int score;
+
 private:
 	virtual void OnInitialize(Pool & pool) override;
 	virtual void OnExecute() override;

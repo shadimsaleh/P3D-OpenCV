@@ -5,7 +5,7 @@
 #include <opencv2/videoio.hpp>
 
 
-#define MAXFACES 10
+#define MAXFACES 1
 
 class CamCapture
 {

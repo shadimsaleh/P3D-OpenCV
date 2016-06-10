@@ -7,6 +7,8 @@
 
 #define MAX_PADDLE_ANGLE 75.0f;
 
+int BallBounceSystem::score = 0;
+
 BallBounceSystem::BallBounceSystem()
 	: game(Game::Instance()),
 	debug(true)
@@ -55,11 +57,12 @@ void BallBounceSystem::OnExecute()
 				if (boxCollider->tag != "Ball")
 					return;
 
-				if (otherCollider->tag == "BackWall")
+				if (otherCollider->tag == "BackWall" || otherCollider->tag == "Paddle")
 				{
 					ballController->direction.x = -ballController->direction.x;
 					ballController->direction.y = -ballController->direction.y;
 					ballController->direction.z = -ballController->direction.z;
+					score++;
 				}
 				else if (otherCollider->tag == "RightWall")
 				{
@@ -77,25 +80,10 @@ void BallBounceSystem::OnExecute()
 				{
 					ballController->direction.y = -ballController->direction.y;
 				}
-				else if (otherCollider->tag == "Paddle")
+				else if (otherCollider->tag == "FrontWall")
 				{
-					glm::vec3 edge;
-					glm::vec3 centerPoint = glm::vec3(0, 0, 0);
-					glm::vec3 length = BoxCollider::GetLength(*otherCollider);
-					glm::vec3 point = length * 0.5f;
-					
-					if (point.x < centerPoint.x)
-					{
-						edge = glm::vec3(otherCollider->min.x, 0, 0);
-					}
-					else 
-					{
-						edge = glm::vec3(otherCollider->max.x, 0, 0);
-					}
-
-					float angle = point.x * 75.0f / edge.x;
-
-					//getchar();
+					score = 0;
+					transform->position = glm::vec3(0, 0, 2);
 				}
 			}
 		}
