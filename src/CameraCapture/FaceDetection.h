@@ -18,7 +18,7 @@ using namespace std;
 class FaceDetection
 {
 public:
-	FaceDetection(char* fileName, CamCapture* capture);
+	FaceDetection(string fileName, CamCapture* capture);
 	~FaceDetection();
 
 	int Initialize();
@@ -28,10 +28,8 @@ private:
 
 	void DetectFaces();
 
-	static void read_csv(const string& filename, vector<Mat>& images, vector<int>& labels, char separator = ';');
-
 	/* XML File Name to detect Faces */
-	char* m_fileName;
+	string m_fileName;
 	CamCapture* m_capture;
 	
 	Mat cap_img, gray_img;

@@ -1,5 +1,5 @@
 #include "FaceDetection.h"
-FaceDetection::FaceDetection(char* fileName, CamCapture* capture)
+FaceDetection::FaceDetection(string fileName, CamCapture* capture)
 {
 	this->m_fileName = fileName;
 	this->m_capture = capture;
@@ -12,12 +12,8 @@ FaceDetection::~FaceDetection()
 
 int FaceDetection::Initialize()
 {
-	if (!face_cascade.load("c:\\haar\\haarcascade_frontalface_alt2.xml")) {
+	if (!face_cascade.load("C:/Users/DecaPod/Documents/GitHub/P3D-OpenCV/src/CameraCapture/" + m_fileName)) {
 		printf("Error loading cascade file for face");
-		return 0;
-	}
-	if (!eye_cascade.load("c:\\haar\\haarcascade_eye.xml")) {
-		printf("Error loading cascade file for eye");
 		return 0;
 	}
 	return 1;

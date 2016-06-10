@@ -247,14 +247,14 @@ void Load(Game& game, ContentLoader& loader)
 	capture = new CamCapture();
 	if (capture->Initialize() == 0) capture = nullptr;
 	//Comentar este else
-	//else 
-	//{
-	//	det = new FaceDetection("haarcascade_frontalface_alt.xml", capture);
-	//	det->Initialize();
-	//}
+	else 
+	{
+		det = new FaceDetection("haarcascade_frontalface_alt.xml", capture);
+		det->Initialize();
+	}
 
 	//Descomentar isto
-	else opticalFlow = new OpticalFlow(capture, 10);
+	//else opticalFlow = new OpticalFlow(capture, 10);
 }
 
 void Update(Game& game, float deltaTime)
