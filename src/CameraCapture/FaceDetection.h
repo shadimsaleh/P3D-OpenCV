@@ -12,7 +12,7 @@
 using namespace cv;
 using namespace std;
 
-#define MAXFACES 4
+#define MAXFACES 100
 
 
 class FaceDetection
@@ -23,15 +23,17 @@ public:
 
 	int Initialize();
 	void Detect();
+	Point& returnFacePoint();
 
 private:
-
+	
 	void DetectFaces();
 
 	/* XML File Name to detect Faces */
 	string m_fileName;
 	CamCapture* m_capture;
-	
+
+	Point pt1;
 	Mat cap_img, gray_img;
 	vector<Rect> faces, eyes;
 	CascadeClassifier face_cascade, eye_cascade;

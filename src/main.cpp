@@ -19,6 +19,7 @@
 
 int Backgroundposition;
 
+Point pt;
 CamCapture* capture;
 OpticalFlow* opticalFlow;
 FaceDetection* det;
@@ -262,6 +263,9 @@ void Update(Game& game, float deltaTime)
 	//Descomentar* isto
 	//if (opticalFlow != nullptr) opticalFlow->GetFlow();
 	if(det != nullptr) det->Detect();
+
+	pt = det->returnFacePoint();
+	
 }
 
 void Render(Game& game, float deltaTime)
