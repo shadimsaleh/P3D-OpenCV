@@ -211,10 +211,11 @@ void Load(Game& game, ContentLoader& loader)
 	cubeEntity->Add<Mesh>(cube);
 	cubeEntity->Add<Transform>();
 
+
 	auto ball = pool.CreateEntity();
 	ball->Add<Transform>(glm::vec3(.5f, 1.5f, 3), glm::vec3(0), glm::vec3(.2f));
 	ball->Add<Mesh>(ballMesh);
-	ball->Add<BallController>(glm::vec3(0.5f, 0.5f, 1), 5000.0f);
+	ball->Add<BallController>(glm::vec3(0.5f, 0.5f, 1), 3000.0f);
 	ball->Add<BoxCollider>("Ball", glm::vec3(0.0f), glm::vec3(1.0f));
 
 	ball = pool.CreateEntity();

@@ -59,8 +59,8 @@ void BallBounceSystem::OnExecute()
 
 				if (otherCollider->tag == "BackWall" || otherCollider->tag == "Paddle")
 				{
-					ballController->direction.x = -ballController->direction.x;
-					ballController->direction.y = -ballController->direction.y;
+					ballController->direction.x = -ballController->direction.x + rand() % 1-0.5f;
+					ballController->direction.y = -ballController->direction.y + rand() % 1-0.5f;
 					ballController->direction.z = -ballController->direction.z;
 					score++;
 				}
@@ -83,7 +83,7 @@ void BallBounceSystem::OnExecute()
 				else if (otherCollider->tag == "FrontWall")
 				{
 					score = 0;
-					transform->position = glm::vec3(0, 0, 2);
+					transform->position = glm::vec3(rand() % 2+ 1, rand() % 2 + 1, 2);
 				}
 			}
 		}

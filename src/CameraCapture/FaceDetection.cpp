@@ -33,7 +33,7 @@ void FaceDetection::Detect()
 void FaceDetection::DetectFaces()
 {
 	//with great processors comes greater performance (change 3rd parameter from 2 to 1.05 or 1.1)
-	face_cascade.detectMultiScale(gray_img, faces, 1.05, 3, 
+	face_cascade.detectMultiScale(gray_img, faces, 1.7, 3, 
 		0 |  CASCADE_SCALE_IMAGE ,Size(30, 30));
 	for (int i = 0; i < MAXFACES; i++)
 	{
