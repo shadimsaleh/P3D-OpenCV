@@ -35,6 +35,6 @@ private:
 
 	Point pt1;
 	Mat cap_img, gray_img;
-	vector<Rect> faces, eyes;
+	std::vector<Rect> faces, eyes;
 	CascadeClassifier face_cascade, eye_cascade;
 };

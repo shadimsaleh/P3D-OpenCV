@@ -14,7 +14,7 @@ FaceDetection::~FaceDetection()
 
 int FaceDetection::Initialize()
 {
-	if (!face_cascade.load("./src/CameraCapture/haarcascade_frontalface_default.xml")) {
+	if (!face_cascade.load("./src/CameraCapture/haarcascade_frontalface_alt.xml")) {
 		printf("Error loading cascade file for face");
 		return 0;
 	}
@@ -33,8 +33,8 @@ void FaceDetection::Detect()
 void FaceDetection::DetectFaces()
 {
 	//with great processors comes greater performance (change 3rd parameter from 2 to 1.05 or 1.1)
-	face_cascade.detectMultiScale(gray_img, faces, 1.3, 1, 
-		0 | CV_HAAR_SCALE_IMAGE ,cvSize(60, 60));
+	face_cascade.detectMultiScale(gray_img, faces, 1.3, 3, 
+		0 |  CASCADE_SCALE_IMAGE ,Size(30, 30));
 	for (int i = 0; i < MAXFACES; i++)
 	{
 		if (faces[i].x + faces[i].width > this->m_capture->GetFrameWidth() ||
